@@ -6,6 +6,13 @@ import { ref } from "vue";
 
 const username = ref("");
 const password = ref("");
+
+const handleSubmit = (event) => {
+	event.preventDefault();
+	// Validate and process form data here
+	console.log("Username:", username.value);
+	console.log("Password:", password.value);
+};
 </script>
 
 <template>
@@ -19,7 +26,7 @@ const password = ref("");
 					href="#"
 					class="flex flex-col justify-center items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
 				>
-					<img class="w-32 h-32 mr-2" src="/logo.ico" alt="logo" />
+					<img class="w-32 h-32 mr-2" src="/logo.png" alt="logo" />
 					Kids Army For Jesus
 				</a>
 				<div
@@ -45,6 +52,7 @@ const password = ref("");
 									class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 									placeholder="Ex: ionichi"
 									required
+									v-model="username"
 								/>
 							</div>
 							<div>
@@ -60,11 +68,13 @@ const password = ref("");
 									placeholder="••••••••"
 									class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 									required
+									v-model="password"
 								/>
 							</div>
 							<button
 								type="submit"
 								class="bg-slate-900 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 text-white font-semibold h-12 px-6 rounded-lg w-full flex items-center justify-center gap-3 dark:bg-sky-500 dark:highlight-white/20 dark:hover:bg-sky-400"
+								@click="handleSubmit"
 							>
 								Sign in
 							</button>
