@@ -12,9 +12,7 @@ defineProps({
 		<h1 class="green">{{ msg }}</h1>
 		<h3>
 			KA4J (Kids Army For Jesus) is managed by
-			<a href="https://github.com/ionichi" target="_blank" rel="noopener">
-				Ionichi
-			</a>
+			<a href="https://github.com/ionichi" target="_blank" rel="noopener"> Ionichi </a>
 		</h3>
 	</div>
 </template>

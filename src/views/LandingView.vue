@@ -12,16 +12,8 @@ import HelloWorld from "@/components/HelloWorld.vue";
 	>
 		<BGOverlayComponent />
 
-		<header
-			class="flex gap-3 justify-center items-center flex-col sm:flex-row p-3"
-		>
-			<img
-				alt="Vue logo"
-				class="logo"
-				src="/logo.png"
-				width="125"
-				height="125"
-			/>
+		<header class="flex gap-3 justify-center items-center flex-col sm:flex-row p-3">
+			<img alt="Vue logo" class="logo" src="/logo.png" width="125" height="125" />
 
 			<div class="wrapper">
 				<HelloWorld msg="KA4J" />

@@ -14,18 +14,10 @@ import { RouterLink } from "vue-router";
 		<BGOverlayComponent />
 
 		<header class="flex gap-3 justify-center items-center flex-col p-3">
-			<img
-				alt="Vue logo"
-				class="logo"
-				src="/logo.png"
-				width="125"
-				height="125"
-			/>
+			<img alt="Vue logo" class="logo" src="/logo.png" width="125" height="125" />
 			<div class="flex flex-col items-center gap-5">
 				<h1 class="text-9xl">404</h1>
-				<p class="text-5xl">
-					<span class="text-red-400">Opps!</span> Page not found.
-				</p>
+				<p class="text-5xl"><span class="text-red-400">Opps!</span> Page not found.</p>
 				<p>The page you're searching for isn't available.</p>
 				<RouterLink
 					to="/dashboard"
