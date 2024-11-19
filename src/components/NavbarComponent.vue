@@ -7,16 +7,12 @@ const navigation = [
 	{ name: "About", href: "/about" },
 	{ name: "Services", href: "/services" },
 	{ name: "Contact", href: "/contact" },
-	// { name: "Team", href: "/team", current: false },
-	// { name: "Projects", href: "/project", current: false },
-	// { name: "Calendar", href: "/calender", current: false },
 ];
 
 const isNavbarOpen = ref(false);
 
 const handleOpenNavbar = () => {
 	isNavbarOpen.value = !isNavbarOpen.value;
-	console.log(isNavbarOpen.value);
 };
 </script>
 
@@ -43,7 +39,6 @@ const handleOpenNavbar = () => {
 					aria-controls="navbar-sticky"
 					aria-expanded="false"
 					@click="handleOpenNavbar"
-					@focusout="handleOpenNavbar"
 				>
 					<span class="sr-only">Open main menu</span>
 					<svg
