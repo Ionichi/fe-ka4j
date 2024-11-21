@@ -2,22 +2,48 @@
 import BGOverlayComponent from "@/components/BGOverlayComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
 import NavbarComponent from "@/components/NavbarComponent.vue";
+import { useAuthStore } from "@/stores/authentication";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toast-notification";
 
 const username = ref("");
 const password = ref("");
+const $toast = useToast();
+const authStore = useAuthStore();
+const router = useRouter();
 
-const handleSubmit = (event) => {
+const handleSubmit = async (event) => {
 	event.preventDefault();
-	// Validate and process form data here
-	console.log("Username:", username.value);
-	console.log("Password:", password.value);
+	if (!username.value || !password.value) {
+		$toast.error("Please enter a username and password!", {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "bottom" : "top-right",
+		});
+		return;
+	}
+
+	try {
+		const data = {
+			username: username.value,
+			password: password.value,
+		};
+		await authStore.login(data);
+
+		$toast.success("Login successfully!", {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "bottom" : "top-right",
+		});
+		router.push("/dashboard");
+	} catch (error) {
+		$toast.error(error, {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "bottom" : "top-right",
+		});
+	}
 };
 </script>
 
 <template>
 	<NavbarComponent />
-	<div class="w-full antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">
+	<div class="w-full h-screen antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">
 		<BGOverlayComponent />
 
 		<section class="bg-gray-50 dark:bg-gray-900">
@@ -26,7 +52,10 @@ const handleSubmit = (event) => {
 					href="#"
 					class="flex flex-col justify-center items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
 				>
-					<img class="w-32 h-32 mr-2" src="/logo.png" alt="logo" />
+					<picture>
+						<source srcset="/logo-dark.png" media="(prefers-color-scheme: light)" />
+						<img class="w-32 h-32 mr-2" src="/logo.png" alt="logo" />
+					</picture>
 					Kids Army For Jesus
 				</a>
 				<div

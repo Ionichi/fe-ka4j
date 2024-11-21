@@ -3,6 +3,7 @@ import LandingView from "@/views/LandingView.vue";
 import DashboardView from "@/views/pages/DashboardView.vue";
 import NotFoundView from "@/views/pages/NotFoundView.vue";
 import LoginView from "@/views/pages/LoginView.vue";
+import { useAuthStore } from "@/stores/authentication";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,7 @@ const router = createRouter({
 			// component: () => import('@/views/DashboardView.vue'),
 			meta: {
 				requiresAuth: true,
+				requiresAdmin: true,
 			},
 		},
 		{
@@ -39,23 +41,31 @@ const router = createRouter({
 	],
 });
 
-// router.beforeEach(async (to, from, next) => {
-// 	const authStore = useAuthStore();
-// 	await authStore.validateAuth();
+router.beforeEach(async (to, from, next) => {
+	const authStore = useAuthStore();
+	await authStore.validateAuth();
 
-// 	if (to.matched.some((record) => record.meta.requiresAuth)) {
-// 		if (!authStore.getAuthStatus) {
-// 			next("/auth/login");
-// 		} else {
-// 			next();
-// 		}
-// 	} else {
-// 		if (to.path === "/auth/login" && authStore.getAuthStatus) {
-// 			next("/");
-// 		} else {
-// 			next();
-// 		}
-// 	}
-// });
+	if (to.matched.some((record) => record.meta.requiresAuth)) {
+		if (to.matched.some((record) => record.meta.requiresAdmin)) {
+			if (!authStore.getAdminStatus) {
+				next("/auth/login");
+			} else {
+				next();
+			}
+		} else {
+			if (!authStore.getAuthStatus) {
+				next("/auth/login");
+			} else {
+				next();
+			}
+		}
+	} else {
+		if (to.path === "/auth/login" && authStore.getAuthStatus) {
+			next("/dashboard");
+		} else {
+			next();
+		}
+	}
+});
 
 export default router;
