@@ -1,6 +1,7 @@
 <script setup>
 import BGOverlayComponent from "@/components/BGOverlayComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
+import LoadingComponent from "@/components/main/LoadingComponent.vue";
 import NavbarComponent from "@/components/NavbarComponent.vue";
 import { useAuthStore } from "@/stores/authentication";
 import { ref } from "vue";
@@ -12,13 +13,17 @@ const password = ref("");
 const $toast = useToast();
 const authStore = useAuthStore();
 const router = useRouter();
+const loading = ref(false);
 
 const handleSubmit = async (event) => {
 	event.preventDefault();
+	loading.value = true;
 	if (!username.value || !password.value) {
 		$toast.error("Please enter a username and password!", {
 			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "bottom" : "top-right",
 		});
+		loading.value = false;
+
 		return;
 	}
 
@@ -32,11 +37,14 @@ const handleSubmit = async (event) => {
 		$toast.success("Login successfully!", {
 			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "bottom" : "top-right",
 		});
+		loading.value = false;
+
 		router.push("/dashboard");
 	} catch (error) {
 		$toast.error(error, {
 			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "bottom" : "top-right",
 		});
+		loading.value = false;
 	}
 };
 </script>
@@ -104,8 +112,11 @@ const handleSubmit = async (event) => {
 								type="submit"
 								class="bg-slate-900 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 text-white font-semibold h-12 px-6 rounded-lg w-full flex items-center justify-center gap-3 dark:bg-sky-500 dark:highlight-white/20 dark:hover:bg-sky-400"
 								@click="handleSubmit"
+								:disabled="loading"
+								:class="loading && 'bg-slate-700 dark:bg-sky-400'"
 							>
-								Sign in
+								<LoadingComponent v-if="loading" />
+								{{ loading ? "Loading..." : "Sign in" }}
 							</button>
 						</form>
 					</div>
