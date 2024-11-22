@@ -13,7 +13,10 @@ import HelloWorld from "@/components/HelloWorld.vue";
 		<BGOverlayComponent />
 
 		<header class="flex gap-3 justify-center items-center flex-col sm:flex-row p-3">
-			<img alt="Vue logo" class="logo" src="/logo.png" width="125" height="125" />
+			<picture>
+				<source srcset="/logo-dark.png" media="(prefers-color-scheme: light)" />
+				<img alt="KA4J Logo" class="logo" src="/logo.png" width="125" height="125" />
+			</picture>
 
 			<div class="wrapper">
 				<HelloWorld msg="KA4J" />

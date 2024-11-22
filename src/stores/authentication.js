@@ -9,6 +9,7 @@ export const useAuthStore = defineStore("auth-store", () => {
 
 	const getAuthStatus = computed(() => isAuthenticated.value);
 	const getAdminStatus = computed(() => isAdmin.value);
+	const getUser = computed(() => user.value);
 
 	const login = async (payload) => {
 		try {
@@ -38,5 +39,16 @@ export const useAuthStore = defineStore("auth-store", () => {
 		}
 	};
 
-	return { isAuthenticated, getAuthStatus, getAdminStatus, user, login, validateAuth };
+	const logout = async () => {
+		try {
+			await axios.post("/auth/logout");
+			isAuthenticated.value = false;
+			user.value = null;
+			isAdmin.value = false;
+		} catch (error) {
+			throw error.response.data.message;
+		}
+	};
+
+	return { getAuthStatus, getAdminStatus, getUser, login, validateAuth, logout };
 });

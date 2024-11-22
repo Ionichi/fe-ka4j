@@ -50,11 +50,11 @@ const handleSubmit = async (event) => {
 			<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
 				<a
 					href="#"
-					class="flex flex-col justify-center items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
+					class="flex flex-col justify-center items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white gap-3"
 				>
 					<picture>
 						<source srcset="/logo-dark.png" media="(prefers-color-scheme: light)" />
-						<img class="w-32 h-32 mr-2" src="/logo.png" alt="logo" />
+						<img class="w-28 h-28" src="/logo.png" alt="logo" />
 					</picture>
 					Kids Army For Jesus
 				</a>

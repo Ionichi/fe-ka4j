@@ -24,7 +24,7 @@ const handleOpenNavbar = () => {
 			<RouterLink to="/" class="flex items-center space-x-3 rtl:space-x-reverse">
 				<picture>
 					<source srcset="/logo-dark.png" media="(prefers-color-scheme: light)" />
-					<img src="/logo.png" class="h-16" alt="KA4J Logo" />
+					<img src="/logo.png" class="h-14" alt="KA4J Logo" />
 				</picture>
 				<span class="self-center text-2xl font-bold whitespace-nowrap dark:text-white">KA4J</span>
 			</RouterLink>
