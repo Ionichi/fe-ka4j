@@ -4,18 +4,38 @@ import FooterComponent from "@/components/FooterComponent.vue";
 import LoadingComponent from "@/components/main/LoadingComponent.vue";
 import NavbarComponent from "@/components/NavbarComponent.vue";
 import { useAuthStore } from "@/stores/authentication";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toast-notification";
 
+const loading = ref(false);
 const username = ref("");
 const password = ref("");
+const inputUsername = ref(null);
+const inputPassword = ref(null);
+
 const $toast = useToast();
 const authStore = useAuthStore();
 const router = useRouter();
-const loading = ref(false);
 
-const handleSubmit = async (event) => {
+onMounted(() => {
+	inputUsername.value.focus();
+});
+
+const handleEnter = (event, trigger) => {
+	if (event.key === "Enter") {
+		switch (trigger) {
+			case "username":
+				inputPassword.value.focus();
+				break;
+			case "password":
+				handleLogin(event);
+				break;
+		}
+	}
+};
+
+const handleLogin = async (event) => {
 	event.preventDefault();
 	loading.value = true;
 	if (!username.value || !password.value) {
@@ -80,9 +100,11 @@ const handleSubmit = async (event) => {
 								<label
 									for="username"
 									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-									>Username</label
 								>
+									Username
+								</label>
 								<input
+									ref="inputUsername"
 									type="username"
 									name="username"
 									id="username"
@@ -90,15 +112,18 @@ const handleSubmit = async (event) => {
 									placeholder="Ex: ionichi"
 									required
 									v-model="username"
+									@keydown="(event) => handleEnter(event, 'username')"
 								/>
 							</div>
 							<div>
 								<label
 									for="password"
 									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-									>Password</label
 								>
+									Password
+								</label>
 								<input
+									ref="inputPassword"
 									type="password"
 									name="password"
 									id="password"
@@ -106,14 +131,19 @@ const handleSubmit = async (event) => {
 									class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 									required
 									v-model="password"
+									@keydown="(event) => handleEnter(event, 'password')"
 								/>
 							</div>
 							<button
-								type="submit"
-								class="bg-slate-900 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 text-white font-semibold h-12 px-6 rounded-lg w-full flex items-center justify-center gap-3 dark:bg-sky-500 dark:highlight-white/20 dark:hover:bg-sky-400"
-								@click="handleSubmit"
+								type="button"
+								class="focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 text-white font-semibold h-12 px-6 rounded-lg w-full flex items-center justify-center gap-3 dark:highlight-white/20"
+								@click="handleLogin"
 								:disabled="loading"
-								:class="loading && 'bg-slate-700 dark:bg-sky-400'"
+								:class="
+									loading
+										? 'bg-slate-500 dark:bg-sky-300'
+										: 'bg-slate-900 hover:bg-slate-700 dark:bg-sky-500 dark:hover:bg-sky-400'
+								"
 							>
 								<LoadingComponent v-if="loading" />
 								{{ loading ? "Loading..." : "Sign in" }}
