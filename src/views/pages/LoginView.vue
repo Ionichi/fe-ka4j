@@ -2,6 +2,7 @@
 import BGOverlayComponent from "@/components/BGOverlayComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
 import ButtonPrimaryComponent from "@/components/main/ButtonPrimaryComponent.vue";
+import InputGroupComponent from "@/components/main/InputGroupComponent.vue";
 import NavbarComponent from "@/components/NavbarComponent.vue";
 import { useAuthStore } from "@/stores/authentication";
 import { onMounted, ref } from "vue";
@@ -19,14 +20,14 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 onMounted(() => {
-	inputUsername.value.focus();
+	inputUsername.value.inputRef.focus();
 });
 
 const handleEnter = (event, trigger) => {
 	if (event.key === "Enter") {
 		switch (trigger) {
 			case "username":
-				inputPassword.value.focus();
+				inputPassword.value.inputRef.focus();
 				break;
 			case "password":
 				handleLogin(event);
@@ -40,7 +41,7 @@ const handleLogin = async (event) => {
 	loading.value = true;
 	if (!username.value || !password.value) {
 		$toast.error("Please enter a username and password!", {
-			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "bottom" : "top-right",
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
 		});
 		loading.value = false;
 
@@ -55,14 +56,14 @@ const handleLogin = async (event) => {
 		await authStore.login(data);
 
 		$toast.success("Login successfully!", {
-			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "bottom" : "top-right",
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
 		});
 		loading.value = false;
 
 		router.push("/dashboard");
 	} catch (error) {
 		$toast.error(error, {
-			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "bottom" : "top-right",
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
 		});
 		loading.value = false;
 	}
@@ -96,44 +97,26 @@ const handleLogin = async (event) => {
 							Sign in to your account
 						</h1>
 						<form class="space-y-5 md:space-y-7" action="#">
-							<div>
-								<label
-									for="username"
-									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-								>
-									Username
-								</label>
-								<input
-									ref="inputUsername"
-									type="username"
-									name="username"
-									id="username"
-									class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-									placeholder="Ex: ionichi"
-									required
-									v-model="username"
-									@keydown="(event) => handleEnter(event, 'username')"
-								/>
-							</div>
-							<div>
-								<label
-									for="password"
-									class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-								>
-									Password
-								</label>
-								<input
-									ref="inputPassword"
-									type="password"
-									name="password"
-									id="password"
-									placeholder="••••••••"
-									class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-									required
-									v-model="password"
-									@keydown="(event) => handleEnter(event, 'password')"
-								/>
-							</div>
+							<InputGroupComponent
+								ref="inputUsername"
+								groupName="Username"
+								type="username"
+								name="username"
+								placeholder="Ex: ionichi"
+								:isRequired="true"
+								v-model="username"
+								:handleKeyDown="(event) => handleEnter(event, 'username')"
+							/>
+							<InputGroupComponent
+								ref="inputPassword"
+								groupName="Password"
+								type="password"
+								name="password"
+								placeholder="••••••••"
+								:isRequired="true"
+								v-model="password"
+								:handleKeyDown="(event) => handleEnter(event, 'password')"
+							/>
 							<ButtonPrimaryComponent
 								text="Sign in"
 								:isDisabled="loading"

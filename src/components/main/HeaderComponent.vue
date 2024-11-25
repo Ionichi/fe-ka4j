@@ -22,12 +22,12 @@ const handleLogout = async () => {
 		await authStore.logout();
 
 		$toast.success("Logged out sucessfully!", {
-			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "bottom" : "top-right",
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
 		});
 		router.push("/auth/login");
 	} catch (error) {
 		$toast.error(error, {
-			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "bottom" : "top-right",
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
 		});
 	}
 };

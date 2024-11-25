@@ -2,7 +2,10 @@
 import LoadingComponent from "./LoadingComponent.vue";
 
 defineProps({
-	text: String,
+	text: {
+		type: String,
+		required: true,
+	},
 	isLoading: {
 		type: Boolean,
 		default: false,
