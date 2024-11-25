@@ -1,7 +1,7 @@
 <script setup>
 import BGOverlayComponent from "@/components/BGOverlayComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
-import LoadingComponent from "@/components/main/LoadingComponent.vue";
+import ButtonPrimaryComponent from "@/components/main/ButtonPrimaryComponent.vue";
 import NavbarComponent from "@/components/NavbarComponent.vue";
 import { useAuthStore } from "@/stores/authentication";
 import { onMounted, ref } from "vue";
@@ -134,20 +134,12 @@ const handleLogin = async (event) => {
 									@keydown="(event) => handleEnter(event, 'password')"
 								/>
 							</div>
-							<button
-								type="button"
-								class="focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 text-white font-semibold h-12 px-6 rounded-lg w-full flex items-center justify-center gap-3 dark:highlight-white/20"
-								@click="handleLogin"
-								:disabled="loading"
-								:class="
-									loading
-										? 'bg-slate-500 dark:bg-sky-300'
-										: 'bg-slate-900 hover:bg-slate-700 dark:bg-sky-500 dark:hover:bg-sky-400'
-								"
-							>
-								<LoadingComponent v-if="loading" />
-								{{ loading ? "Loading..." : "Sign in" }}
-							</button>
+							<ButtonPrimaryComponent
+								text="Sign in"
+								:isDisabled="loading"
+								:isLoading="loading"
+								:onClick="handleLogin"
+							/>
 						</form>
 					</div>
 				</div>

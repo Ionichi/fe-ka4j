@@ -29,11 +29,13 @@ const handleOpenNavbar = () => {
 				<span class="self-center text-2xl font-bold whitespace-nowrap dark:text-white">KA4J</span>
 			</RouterLink>
 			<div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-				<RouterLink
-					to="/auth/login"
-					class="bg-slate-900 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 text-white font-semibold h-12 px-6 rounded-lg flex items-center justify-center gap-3 sm:w-auto dark:bg-sky-500 dark:highlight-white/20 dark:hover:bg-sky-400"
-				>
-					Get Started
+				<RouterLink to="/auth/login">
+					<button
+						type="button"
+						class="bg-slate-900 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 text-white font-semibold h-12 px-6 rounded-lg flex items-center justify-center gap-3 sm:w-auto dark:bg-sky-500 dark:highlight-white/20 dark:hover:bg-sky-400"
+					>
+						Get Started
+					</button>
 				</RouterLink>
 				<button
 					data-collapse-toggle="navbar-sticky"
