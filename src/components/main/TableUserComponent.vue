@@ -33,7 +33,7 @@ defineProps({
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-if="body.length === 0">
+				<tr v-if="body.length === 0" class="dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
 					<td colspan="4" class="px-6 py-4 text-center">No Data</td>
 				</tr>
 				<tr
