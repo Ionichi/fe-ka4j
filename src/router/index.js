@@ -4,6 +4,7 @@ import DashboardView from "@/views/pages/DashboardView.vue";
 import NotFoundView from "@/views/pages/NotFoundView.vue";
 import LoginView from "@/views/pages/LoginView.vue";
 import { useAuthStore } from "@/stores/authentication";
+import UserView from "@/views/pages/UserView.vue";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,19 +14,15 @@ const router = createRouter({
 			redirect: "not-found",
 		},
 		{
+			path: "/not-found",
+			name: "not-found",
+			component: NotFoundView,
+			// component: () => import('@/views/pages/NotFoundView.vue'),
+		},
+		{
 			path: "/",
 			name: "landing",
 			component: LandingView,
-		},
-		{
-			path: "/dashboard",
-			name: "dashboard",
-			component: DashboardView,
-			// component: () => import('@/views/DashboardView.vue'),
-			meta: {
-				requiresAuth: true,
-				requiresAdmin: true,
-			},
 		},
 		{
 			path: "/auth/login",
@@ -33,10 +30,22 @@ const router = createRouter({
 			component: LoginView,
 		},
 		{
-			path: "/not-found",
-			name: "not-found",
-			component: NotFoundView,
-			// component: () => import('@/views/pages/NotFoundView.vue'),
+			path: "/dashboard",
+			name: "dashboard",
+			component: DashboardView,
+			meta: {
+				requiresAuth: true,
+				requiresAdmin: true,
+			},
+		},
+		{
+			path: "/users",
+			name: "users",
+			component: UserView,
+			meta: {
+				requiresAuth: true,
+				requiresAdmin: true,
+			},
 		},
 	],
 });
