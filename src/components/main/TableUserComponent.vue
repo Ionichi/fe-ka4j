@@ -33,6 +33,9 @@ defineProps({
 				</tr>
 			</thead>
 			<tbody>
+				<tr v-if="body.length === 0">
+					<td colspan="4" class="px-6 py-4 text-center">No Data</td>
+				</tr>
 				<tr
 					v-for="(content, index) in body"
 					:key="index"
