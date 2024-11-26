@@ -1,5 +1,6 @@
 <script setup>
 import { useAuthStore } from "@/stores/authentication";
+import { useMenu } from "@/stores/menu";
 import DateHelper from "@/utils/dateHelper";
 import { faGear, faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -8,6 +9,7 @@ import { RouterLink, useRouter } from "vue-router";
 import { useToast } from "vue-toast-notification";
 
 const authStore = useAuthStore();
+const menu = useMenu();
 const $toast = useToast();
 const router = useRouter();
 const user = authStore.getUser;
@@ -15,6 +17,10 @@ const isProfileOpen = ref(false);
 
 const handleOpenProfile = () => {
 	isProfileOpen.value = !isProfileOpen.value;
+};
+
+const handleOpenMenu = () => {
+	menu.handleMenuOpen();
 };
 
 const handleLogout = async () => {
@@ -44,6 +50,7 @@ const handleLogout = async () => {
 						aria-controls="logo-sidebar"
 						type="button"
 						class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+						@click="handleOpenMenu"
 					>
 						<span class="sr-only">Open sidebar</span>
 						<svg
