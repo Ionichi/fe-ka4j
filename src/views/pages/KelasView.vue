@@ -1,0 +1,135 @@
+<script setup>
+import ButtonPrimaryComponent from "@/components/main/ButtonPrimaryComponent.vue";
+import HeaderComponent from "@/components/main/HeaderComponent.vue";
+import SidebarComponent from "@/components/main/SidebarComponent.vue";
+import TableBaseComponent from "@/components/main/TableBaseComponent.vue";
+import KelasService from "@/services/kelas";
+import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { onMounted, ref, watch } from "vue";
+import { useToast } from "vue-toast-notification";
+
+const $toast = useToast();
+const kelas = ref([]);
+
+const isLoading = ref(false);
+
+const headerTable = [
+	{ key: "no", text: "No" },
+	{ key: "action", text: "Action" },
+	{ key: "nama_kelas", text: "Class Name" },
+	{ key: "status", text: "Status" },
+];
+
+const bodyTable = ref([]);
+
+const showCreateModal = () => {
+	kelas.value = [{ id: "-", nama: "-", isActive: "-" }];
+};
+
+const handleEdit = (id) => {
+	console.log(id);
+};
+
+const handleDelete = (id) => {
+	console.log(id);
+};
+
+const fetchDataKelas = async () => {
+	isLoading.value = true;
+	try {
+		const response = await KelasService.getKelas();
+		kelas.value = null;
+		kelas.value = response.data.kelas;
+		isLoading.value = false;
+
+		$toast.success(response.message, {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+		});
+	} catch (error) {
+		$toast.error(error, {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+		});
+	}
+};
+
+watch(kelas, async () => {
+	bodyTable.value = [];
+	kelas.value.forEach((element) => {
+		bodyTable.value.push({
+			id: element.id,
+			nama: element.nama,
+			status: element.isActive,
+		});
+	});
+});
+
+onMounted(() => {
+	fetchDataKelas();
+});
+</script>
+
+<template>
+	<HeaderComponent />
+	<SidebarComponent />
+
+	<div class="p-4 sm:ml-64">
+		<div
+			class="min-h-screen p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 dark:text-white mt-20"
+		>
+			<div class="text-2xl font-bold mb-5">
+				<span>Class Management</span>
+			</div>
+			<div class="flex justify-between items-center mb-5">
+				<div class="flex items-center gap-3">
+					<div class="input-group">
+						<label for="table-search" class="sr-only">Search</label>
+						<div class="relative">
+							<div
+								class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none"
+							>
+								<svg
+									class="w-4 h-4 text-gray-500 dark:text-gray-400"
+									aria-hidden="true"
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 20 20"
+								>
+									<path
+										stroke="currentColor"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+									/>
+								</svg>
+							</div>
+							<input
+								type="text"
+								id="table-search"
+								class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+								placeholder="Search for class"
+							/>
+						</div>
+					</div>
+					<FontAwesomeIcon
+						:icon="faArrowsRotate"
+						class="text-2xl"
+						:class="isLoading && 'animate-spin'"
+						@click="fetchDataKelas"
+					/>
+				</div>
+				<div>
+					<ButtonPrimaryComponent class="text-sm h-10" text="Create" @click="showCreateModal" />
+				</div>
+			</div>
+			<TableBaseComponent
+				:headers="headerTable"
+				:body="bodyTable"
+				:is-loading="isLoading"
+				:handle-edit="handleEdit"
+				:handle-delete="handleDelete"
+			/>
+		</div>
+	</div>
+</template>

@@ -11,6 +11,8 @@ import { useToast } from "vue-toast-notification";
 const $toast = useToast();
 const users = ref([]);
 
+const isLoading = ref(false);
+
 const headerTable = [
 	{ key: "action", text: "Action" },
 	{ key: "username", text: "Username" },
@@ -24,10 +26,12 @@ const showCreateModal = () => {
 };
 
 const fetchDataUsers = async () => {
+	isLoading.value = true;
 	try {
 		const response = await UserService.getUsers();
 		users.value = null;
 		users.value = response.data.users;
+		isLoading.value = false;
 
 		$toast.success(response.message, {
 			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
@@ -70,7 +74,7 @@ onMounted(async () => {
 			</div>
 			<div class="flex justify-between items-center mb-5">
 				<div class="input-group">
-					<label for="table-search-users" class="sr-only">Search</label>
+					<label for="table-search" class="sr-only">Search</label>
 					<div class="relative">
 						<div
 							class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none"
@@ -93,7 +97,7 @@ onMounted(async () => {
 						</div>
 						<input
 							type="text"
-							id="table-search-users"
+							id="table-search"
 							class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="Search for users"
 						/>
@@ -103,7 +107,7 @@ onMounted(async () => {
 					<ButtonPrimaryComponent class="text-sm h-10" text="Create" @click="showCreateModal" />
 				</div>
 			</div>
-			<TableUserComponent :headers="headerTable" :body="bodyTable" />
+			<TableUserComponent :headers="headerTable" :body="bodyTable" :isLoading="isLoading" />
 		</div>
 	</div>
 </template>

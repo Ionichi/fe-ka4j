@@ -5,6 +5,7 @@ import NotFoundView from "@/views/pages/NotFoundView.vue";
 import LoginView from "@/views/pages/LoginView.vue";
 import { useAuthStore } from "@/stores/authentication";
 import UserView from "@/views/pages/UserView.vue";
+import KelasView from "@/views/pages/KelasView.vue";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,15 @@ const router = createRouter({
 			path: "/auth/login",
 			name: "login",
 			component: LoginView,
+		},
+		{
+			path: "/class",
+			name: "class",
+			component: KelasView,
+			meta: {
+				requiresAuth: true,
+				requiresAdmin: true,
+			},
 		},
 		{
 			path: "/dashboard",
