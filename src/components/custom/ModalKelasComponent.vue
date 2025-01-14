@@ -1,10 +1,10 @@
 <script setup>
-import { ref, watch } from "vue";
+import { nextTick, ref, watch } from "vue";
 import ButtonPrimaryComponent from "../main/ButtonPrimaryComponent.vue";
 import ModalComponent from "../main/ModalComponent.vue";
 import InputGroupComponent from "../main/InputGroupComponent.vue";
 
-const { dataEdit } = defineProps({
+const { showModal, dataEdit } = defineProps({
 	showModal: { type: Boolean, required: true },
 	onClose: { type: Function, required: true },
 	isLoading: { type: Boolean, required: true },
@@ -16,6 +16,7 @@ const className = ref({
 	id: "",
 	nama: "",
 });
+const inputClassName = ref(null);
 
 const isInputValid = () => {
 	return className.value.nama && (dataEdit ? className.value.id : true);
@@ -33,6 +34,19 @@ const handleSubmit = (event) => {
 		emit("handleSubmit", className.value);
 	}
 };
+
+watch(
+	() => showModal,
+	async () => {
+		await nextTick();
+		if (showModal) {
+			inputClassName.value.inputRef.focus();
+		} else {
+			className.value.id = "";
+			className.value.nama = "";
+		}
+	}
+);
 
 watch(
 	() => dataEdit,
