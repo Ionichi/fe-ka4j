@@ -2,7 +2,7 @@
 import ButtonPrimaryComponent from "@/components/main/ButtonPrimaryComponent.vue";
 import HeaderComponent from "@/components/main/HeaderComponent.vue";
 import SidebarComponent from "@/components/main/SidebarComponent.vue";
-import TableUserComponent from "@/components/main/TableUserComponent.vue";
+import TableUserComponent from "@/components/custom/TableUserComponent.vue";
 import UserService from "@/services/users";
 import DateHelper from "@/utils/dateHelper";
 import { onMounted, ref, watch } from "vue";

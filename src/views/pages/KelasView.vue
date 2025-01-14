@@ -1,4 +1,6 @@
 <script setup>
+import ModalConfirm from "@/components/custom/ModalConfirm.vue";
+import ModalKelasComponent from "@/components/custom/ModalKelasComponent.vue";
 import ButtonPrimaryComponent from "@/components/main/ButtonPrimaryComponent.vue";
 import HeaderComponent from "@/components/main/HeaderComponent.vue";
 import SidebarComponent from "@/components/main/SidebarComponent.vue";
@@ -11,8 +13,12 @@ import { useToast } from "vue-toast-notification";
 
 const $toast = useToast();
 const kelas = ref([]);
+const dataEdit = ref(null);
+const dataDel = ref(null);
 
 const isLoading = ref(false);
+const showModal = ref(false);
+const showConfirm = ref(false);
 
 const headerTable = [
 	{ key: "no", text: "No" },
@@ -24,24 +30,15 @@ const headerTable = [
 const bodyTable = ref([]);
 
 const showCreateModal = () => {
-	kelas.value = [{ id: "-", nama: "-", isActive: "-" }];
+	showModal.value = true;
 };
 
-const handleEdit = (id) => {
-	console.log(id);
-};
-
-const handleDelete = (id) => {
-	console.log(id);
-};
-
-const fetchDataKelas = async () => {
+const handleSubmit = async (data) => {
 	isLoading.value = true;
 	try {
-		const response = await KelasService.getKelas();
-		kelas.value = null;
-		kelas.value = response.data.kelas;
-		isLoading.value = false;
+		const response = await KelasService.storeOrUpdateKelas(data);
+		fetchDataKelas();
+		handleOnClose();
 
 		$toast.success(response.message, {
 			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
@@ -50,6 +47,78 @@ const fetchDataKelas = async () => {
 		$toast.error(error, {
 			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
 		});
+	} finally {
+		isLoading.value = false;
+	}
+};
+
+const handleEdit = async (id) => {
+	isLoading.value = true;
+	try {
+		const response = await KelasService.getKelasById(id);
+		dataEdit.value = null;
+		dataEdit.value = response.data.kelas;
+		showModal.value = true;
+
+		$toast.success(response.message, {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+		});
+	} catch (error) {
+		$toast.error(error, {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+		});
+	} finally {
+		isLoading.value = false;
+	}
+};
+
+const handleDelete = (id) => {
+	showConfirm.value = true;
+	dataDel.value = id;
+};
+
+const handleConfirmSubmit = async (id) => {
+	isLoading.value = true;
+	try {
+		const response = await KelasService.deleteKelas(id);
+		fetchDataKelas();
+		handleOnClose();
+
+		$toast.success(response.message, {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+		});
+	} catch (error) {
+		$toast.error(error, {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+		});
+	} finally {
+		isLoading.value = false;
+	}
+};
+
+const handleOnClose = () => {
+	showModal.value = false;
+	showConfirm.value = false;
+	dataEdit.value = null;
+	dataDel.value = null;
+};
+
+const fetchDataKelas = async () => {
+	isLoading.value = true;
+	try {
+		const response = await KelasService.getKelas();
+		kelas.value = null;
+		kelas.value = response.data.kelas;
+
+		$toast.success(response.message, {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+		});
+	} catch (error) {
+		$toast.error(error, {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+		});
+	} finally {
+		isLoading.value = false;
 	}
 };
 
@@ -129,6 +198,22 @@ onMounted(() => {
 				:is-loading="isLoading"
 				:handle-edit="handleEdit"
 				:handle-delete="handleDelete"
+			/>
+
+			<ModalKelasComponent
+				:show-modal="showModal"
+				:on-close="handleOnClose"
+				:is-loading="isLoading"
+				:data-edit="dataEdit"
+				@handle-submit="handleSubmit"
+			/>
+
+			<ModalConfirm
+				:show-modal="showConfirm"
+				:on-close="handleOnClose"
+				:is-loading="isLoading"
+				:data-del="dataDel"
+				@handle-confirm-submit="handleConfirmSubmit"
 			/>
 		</div>
 	</div>

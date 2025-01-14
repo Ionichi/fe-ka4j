@@ -19,7 +19,10 @@ defineProps({
 		type: Boolean,
 		default: false,
 	},
-	handleKeyDown: Function,
+	handleKeyDown: {
+		type: Function,
+		required: false,
+	},
 });
 
 const inputRef = ref(null);
@@ -33,7 +36,7 @@ const inputModel = defineModel();
 <template>
 	<div>
 		<label :for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-			{{ groupName }}
+			{{ groupName }} <span v-if="isRequired" class="text-red-500">*</span>
 		</label>
 		<input
 			ref="inputRef"
