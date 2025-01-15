@@ -34,13 +34,14 @@ defineProps({
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-if="isLoading">
+				<tr v-if="isLoading" class="dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
 					<td colspan="4" class="px-6 py-4 text-center">Loading...</td>
 				</tr>
 				<tr v-else-if="body.length === 0" class="dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
 					<td colspan="4" class="px-6 py-4 text-center">No Data</td>
 				</tr>
 				<tr
+					v-else
 					v-for="(content, index) in body"
 					:key="index"
 					class="dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -51,8 +52,16 @@ defineProps({
 				>
 					<td class="px-6 py-4">
 						<div class="flex gap-5 cursor-pointer text-lg">
-							<FontAwesomeIcon :icon="faPencil" class="text-yellow-500 dark:text-white" />
-							<FontAwesomeIcon :icon="faTrashCan" class="text-red-500" />
+							<FontAwesomeIcon
+								:icon="faPencil"
+								class="text-yellow-500 dark:text-white"
+								@click="handleEdit(content['id'])"
+							/>
+							<FontAwesomeIcon
+								:icon="faTrashCan"
+								class="text-red-500"
+								@click="handleDelete(content['id'])"
+							/>
 						</div>
 					</td>
 					<th
