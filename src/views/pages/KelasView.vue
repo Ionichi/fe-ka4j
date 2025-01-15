@@ -213,6 +213,7 @@ onMounted(() => {
 				:on-close="handleOnClose"
 				:is-loading="isLoading"
 				:data-del="dataDel"
+				message="Are you sure you want to permanently remove this data?"
 				@handle-confirm-submit="handleConfirmSubmit"
 			/>
 		</div>

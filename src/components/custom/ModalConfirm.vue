@@ -9,6 +9,7 @@ const { dataDel } = defineProps({
 	onClose: { type: Function, required: true },
 	isLoading: { type: Boolean, required: true },
 	dataDel: { type: [String, null], required: true },
+	message: { type: String, required: true },
 });
 
 const emit = defineEmits(["handleConfirmSubmit"]);
@@ -20,7 +21,7 @@ const handleSubmit = () => {
 <template>
 	<ModalComponent :show-modal="showModal" :on-close="onClose" modal-title="Confirmation!" :is-loading="isLoading">
 		<template #modalContent>
-			<p class="py-8">Are you sure you want to permanently remove this data?</p>
+			<p class="py-8">{{ message }}</p>
 		</template>
 		<template #modalButton>
 			<button

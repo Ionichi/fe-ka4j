@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, ref, watch } from "vue";
+import { nextTick, reactive, ref, watch } from "vue";
 import ButtonPrimaryComponent from "../main/ButtonPrimaryComponent.vue";
 import ModalComponent from "../main/ModalComponent.vue";
 import InputGroupComponent from "../main/InputGroupComponent.vue";
@@ -12,14 +12,14 @@ const { showModal, dataEdit } = defineProps({
 });
 const emit = defineEmits(["handleSubmit"]);
 
-const className = ref({
+const className = reactive({
 	id: "",
 	nama: "",
 });
 const inputClassName = ref(null);
 
 const isInputValid = () => {
-	return className.value.nama && (dataEdit ? className.value.id : true);
+	return className.nama && (dataEdit ? className.id : true);
 };
 
 const handleEnter = (event) => {
@@ -31,7 +31,7 @@ const handleEnter = (event) => {
 const handleSubmit = (event) => {
 	event.preventDefault();
 	if (isInputValid()) {
-		emit("handleSubmit", className.value);
+		emit("handleSubmit", className);
 	}
 };
 
@@ -42,8 +42,8 @@ watch(
 		if (showModal) {
 			inputClassName.value.inputRef.focus();
 		} else {
-			className.value.id = "";
-			className.value.nama = "";
+			className.id = "";
+			className.nama = "";
 		}
 	}
 );
@@ -51,8 +51,8 @@ watch(
 watch(
 	() => dataEdit,
 	(data) => {
-		className.value.id = data?.id;
-		className.value.nama = data?.nama;
+		className.id = data?.id;
+		className.nama = data?.nama;
 	}
 );
 </script>
