@@ -23,6 +23,10 @@ defineProps({
 		type: Function,
 		required: false,
 	},
+	tabindex: {
+		type: String,
+		required: false,
+	},
 });
 
 const inputRef = ref(null);
@@ -48,6 +52,7 @@ const inputModel = defineModel();
 			:required="isRequired"
 			@keydown="handleKeyDown"
 			v-model="inputModel"
+			:tabindex="tabindex"
 		/>
 	</div>
 </template>
