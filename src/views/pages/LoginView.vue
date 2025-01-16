@@ -5,6 +5,8 @@ import ButtonPrimaryComponent from "@/components/main/ButtonPrimaryComponent.vue
 import InputGroupComponent from "@/components/main/InputGroupComponent.vue";
 import NavbarComponent from "@/components/NavbarComponent.vue";
 import { useAuthStore } from "@/stores/authentication";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toast-notification";
@@ -14,6 +16,8 @@ const username = ref("");
 const password = ref("");
 const inputUsername = ref(null);
 const inputPassword = ref(null);
+
+const isShowPassword = ref(false);
 
 const $toast = useToast();
 const authStore = useAuthStore();
@@ -34,6 +38,10 @@ const handleEnter = (event, trigger) => {
 				break;
 		}
 	}
+};
+
+const viewPassword = () => {
+	isShowPassword.value = !isShowPassword.value;
 };
 
 const handleLogin = async (event) => {
@@ -107,16 +115,24 @@ const handleLogin = async (event) => {
 								v-model="username"
 								:handleKeyDown="(event) => handleEnter(event, 'username')"
 							/>
-							<InputGroupComponent
-								ref="inputPassword"
-								groupName="Password"
-								type="password"
-								name="password"
-								placeholder="••••••••"
-								:isRequired="true"
-								v-model="password"
-								:handleKeyDown="(event) => handleEnter(event, 'password')"
-							/>
+							<div class="grid">
+								<InputGroupComponent
+									ref="inputPassword"
+									groupName="Password"
+									:type="isShowPassword ? 'text' : 'password'"
+									name="password"
+									placeholder="••••••••"
+									:isRequired="true"
+									v-model="password"
+									:handleKeyDown="(event) => handleEnter(event, 'password')"
+									class="row-start-1 col-start-1"
+								/>
+								<FontAwesomeIcon
+									:icon="isShowPassword ? faEye : faEyeSlash"
+									class="z-10 right-3 top-3.5 relative col-start-1 row-start-1 h-4 w-4 self-center justify-self-end"
+									@click="viewPassword"
+								/>
+							</div>
 							<ButtonPrimaryComponent
 								text="Sign in"
 								:isDisabled="loading"
