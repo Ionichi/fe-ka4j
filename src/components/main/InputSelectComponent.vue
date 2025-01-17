@@ -60,6 +60,7 @@ const inputModel = defineModel();
 		/> -->
 		<div class="grid">
 			<select
+				:data-id="name"
 				ref="inputRef"
 				:name="name"
 				:id="name"

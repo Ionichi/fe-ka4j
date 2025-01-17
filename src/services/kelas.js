@@ -5,7 +5,7 @@ class KelasService {
 		try {
 			return await axios.get("/kelas").then((res) => res.data);
 		} catch (error) {
-			return error.response.data.message;
+			throw error.response.data.message;
 		}
 	};
 
@@ -13,7 +13,7 @@ class KelasService {
 		try {
 			return await axios.get("/kelas/" + id).then((res) => res.data);
 		} catch (error) {
-			return error.response.data.message;
+			throw error.response.data.message;
 		}
 	};
 
@@ -24,7 +24,7 @@ class KelasService {
 			}
 			return await axios.post("/kelas", data).then((res) => res.data);
 		} catch (error) {
-			return error.response.data.message;
+			throw error.response.data.message;
 		}
 	};
 
@@ -32,7 +32,7 @@ class KelasService {
 		try {
 			return await axios.delete("/kelas/" + id).then((res) => res.data);
 		} catch (error) {
-			return error.response.data.message;
+			throw error.response.data.message;
 		}
 	};
 }

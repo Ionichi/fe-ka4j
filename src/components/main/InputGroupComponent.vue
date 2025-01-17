@@ -43,6 +43,7 @@ const inputModel = defineModel();
 			{{ groupName }} <span v-if="isRequired" class="text-red-500">*</span>
 		</label>
 		<input
+			:data-id="name"
 			ref="inputRef"
 			:type="type"
 			:name="name"
