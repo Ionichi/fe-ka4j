@@ -69,24 +69,23 @@ const handleSubmit = async (data) => {
 };
 
 const handleEdit = async (id) => {
-	console.log(id);
-	// isLoading.value = true;
-	// try {
-	// 	const response = await KelasService.getKelasById(id);
-	// 	dataEdit.value = null;
-	// 	dataEdit.value = response.data.kelas;
-	// 	showModal.value = true;
+	isLoading.value = true;
+	try {
+		const response = await UserService.getUserById(id);
+		dataEdit.value = null;
+		dataEdit.value = response.data.user;
+		await showCreateModal();
 
-	// 	$toast.success(response.message, {
-	// 		position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
-	// 	});
-	// } catch (error) {
-	// 	$toast.error(error, {
-	// 		position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
-	// 	});
-	// } finally {
-	// 	isLoading.value = false;
-	// }
+		$toast.success(response.message, {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+		});
+	} catch (error) {
+		$toast.error(error, {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+		});
+	} finally {
+		isLoading.value = false;
+	}
 };
 
 const handleDelete = (id) => {

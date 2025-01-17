@@ -9,13 +9,13 @@ class UserService {
 		}
 	};
 
-	// static getUserByUsername = async (id) => {
-	// 	try {
-	// 		return await axios.get("/kelas/" + id).then((res) => res.data);
-	// 	} catch (error) {
-	// 		throw error.response.data.message;
-	// 	}
-	// };
+	static getUserById = async (id) => {
+		try {
+			return await axios.get("/auth/users/" + id).then((res) => res.data);
+		} catch (error) {
+			throw error.response.data.message;
+		}
+	};
 
 	static storeOrUpdateUser = async (data) => {
 		try {

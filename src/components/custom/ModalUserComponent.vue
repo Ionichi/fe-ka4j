@@ -39,8 +39,7 @@ const isShowPassword = ref(false);
 const isInputValid = () => {
 	return (
 		userData.username &&
-		userData.password &&
-		userData.password.length >= 6 &&
+		(dataEdit ? true : userData.password && userData.password.length >= 6) &&
 		userData.tglLahir &&
 		userData.kelas &&
 		(dataEdit ? userData.id : true)
@@ -90,6 +89,9 @@ watch(
 		} else {
 			userData.id = "";
 			userData.username = "";
+			userData.password = "";
+			userData.tglLahir = "";
+			userData.kelas = "";
 		}
 	}
 );
@@ -99,6 +101,9 @@ watch(
 	(data) => {
 		userData.id = data?.id;
 		userData.username = data?.username;
+		userData.password = data?.password;
+		userData.tglLahir = data?.tglLahir;
+		userData.kelas = data?.kelasId;
 	}
 );
 </script>
@@ -106,8 +111,8 @@ watch(
 <template>
 	<ModalComponent :show-modal="showModal" :on-close="onClose" modal-title="Users Management" :is-loading="isLoading">
 		<template #modalContent>
-			<form class="mt-8 mb-5 space-y-5 md:space-y-7" action="#">
-				<div class="grid grid-cols-2 gap-5">
+			<form class="mt-8 mb-5 space-y-5 md:space-y-7 text-left" action="#">
+				<div class="grid grid-cols-2 gap-5 mb-3">
 					<InputGroupComponent
 						ref="inputUsername"
 						groupName="Username"
@@ -139,7 +144,7 @@ watch(
 							:type="isShowPassword ? 'text' : 'password'"
 							name="password"
 							placeholder="••••••••"
-							:isRequired="true"
+							:isRequired="dataEdit ? false : true"
 							v-model="userData.password"
 							:handleKeyDown="handleEnter"
 							class="w-full row-start-1 col-start-1"
@@ -150,7 +155,6 @@ watch(
 							class="z-10 right-3 top-3.5 relative col-start-1 row-start-1 h-4 w-4 self-center justify-self-end"
 							@click="viewPassword"
 						/>
-						<span class="text-gray-600 mt-2">Note: must be at least 6 characters*</span>
 					</div>
 					<InputSelectComponent
 						ref="inputKelas"
@@ -166,6 +170,11 @@ watch(
 						:options="optionsKelas"
 					/>
 				</div>
+				<span class="text-sm text-gray-600">- Password field must be at least 6 characters</span>
+				<br />
+				<span v-if="dataEdit" class="text-sm text-gray-600 mt-2">
+					- Leave password field blank to keep current password.
+				</span>
 			</form>
 		</template>
 		<template #modalButton>
