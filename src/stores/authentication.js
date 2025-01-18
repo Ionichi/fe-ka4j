@@ -35,7 +35,10 @@ export const useAuthStore = defineStore("auth-store", () => {
 			isAuthenticated.value = false;
 			user.value = null;
 			isAdmin.value = false;
-			console.log(error.response.data.message);
+			const message = error.response.data.message;
+			const formatMessage = message.charAt(0).toUpperCase() + message.slice(1);
+
+			console.log(formatMessage);
 		}
 	};
 

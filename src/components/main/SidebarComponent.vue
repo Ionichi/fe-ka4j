@@ -86,13 +86,13 @@ const menu = useMenu();
 					</RouterLink>
 				</li>
 				<li>
-					<a
-						href="#"
+					<RouterLink
+						to="/children"
 						class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
 					>
 						<FontAwesomeIcon :icon="faChildren" />
 						<span class="flex-1 ms-3 whitespace-nowrap">Children</span>
-					</a>
+					</RouterLink>
 				</li>
 				<li>
 					<a
