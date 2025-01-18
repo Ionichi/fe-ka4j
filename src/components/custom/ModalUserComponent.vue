@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useToast } from "vue-toast-notification";
 import { useActiveElement } from "@vueuse/core";
+import DateHelper from "@/utils/dateHelper";
 
 const { showModal, dataEdit } = defineProps({
 	showModal: { type: Boolean, required: true },
@@ -102,7 +103,7 @@ watch(
 		userData.id = data?.id;
 		userData.username = data?.username;
 		userData.password = data?.password;
-		userData.tglLahir = data?.tglLahir;
+		userData.tglLahir = DateHelper.formatISODate(data?.tglLahir);
 		userData.kelas = data?.kelasId;
 	}
 );
@@ -115,23 +116,24 @@ watch(
 				<div class="grid grid-cols-2 gap-5 mb-3">
 					<InputGroupComponent
 						ref="inputUsername"
-						groupName="Username"
+						group-name="Username"
 						type="text"
 						name="username"
 						placeholder="Ex: fery"
-						:isRequired="true"
+						:is-required="true"
 						v-model="userData.username"
 						:handleKeyDown="handleEnter"
 						class="w-full"
 						tabindex="1"
+						:is-read-only="dataEdit ? true : false"
 					/>
 					<InputGroupComponent
 						ref="inputTglLahir"
-						groupName="Birth"
+						group-name="Birth"
 						type="date"
 						name="birth"
 						placeholder="--/--/----"
-						:isRequired="true"
+						:is-required="true"
 						v-model="userData.tglLahir"
 						:handleKeyDown="handleEnter"
 						class="w-full"
@@ -140,11 +142,11 @@ watch(
 					<div class="grid">
 						<InputGroupComponent
 							ref="inputPassword"
-							groupName="Password"
+							group-name="Password"
 							:type="isShowPassword ? 'text' : 'password'"
 							name="password"
 							placeholder="••••••••"
-							:isRequired="dataEdit ? false : true"
+							:is-required="dataEdit ? false : true"
 							v-model="userData.password"
 							:handleKeyDown="handleEnter"
 							class="w-full row-start-1 col-start-1"
@@ -158,11 +160,11 @@ watch(
 					</div>
 					<InputSelectComponent
 						ref="inputKelas"
-						groupName="Class Name"
+						group-name="Class Name"
 						type="text"
 						name="className"
 						placeholder="Ex: Joy"
-						:isRequired="true"
+						:is-required="true"
 						v-model="userData.kelas"
 						:handleKeyDown="handleEnter"
 						class="w-full"

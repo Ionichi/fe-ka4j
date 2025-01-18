@@ -26,9 +26,9 @@ class UserService {
 			delete formatData.kelas;
 
 			if (data.id) {
-				return await axios.post("/register/" + data.id, formatData).then((res) => res.data);
+				return await axios.put("/auth/users/" + data.id, formatData).then((res) => res.data);
 			}
-			return await axios.post("/auth/register", formatData).then((res) => res.data);
+			return await axios.post("/auth/users", formatData).then((res) => res.data);
 		} catch (error) {
 			throw error.response.data.message;
 		}

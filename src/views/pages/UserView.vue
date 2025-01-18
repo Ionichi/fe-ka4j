@@ -145,7 +145,7 @@ watch(users, async () => {
 		bodyTable.value.push({
 			id: user.id,
 			username: user.username,
-			birth: DateHelper.formatLocalDate(new Date(user.tglLahir)),
+			birth: DateHelper.formatLocalDate(user.tglLahir),
 			class: user.kelas?.nama || "-",
 			status: user.isActive,
 		});

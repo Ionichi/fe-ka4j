@@ -27,6 +27,10 @@ defineProps({
 		type: String,
 		required: false,
 	},
+	isReadOnly: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const inputRef = ref(null);
@@ -54,6 +58,7 @@ const inputModel = defineModel();
 			@keydown="handleKeyDown"
 			v-model="inputModel"
 			:tabindex="tabindex"
+			:readonly="isReadOnly"
 		/>
 	</div>
 </template>
