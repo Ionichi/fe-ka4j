@@ -25,14 +25,16 @@ const showModal = ref(false);
 const showConfirm = ref(false);
 
 const headerTable = [
+	{ key: "no", text: "No" },
 	{ key: "action", text: "Action" },
 	{ key: "nama", text: "Name" },
 	{ key: "gender", text: "Gender" },
 	{ key: "class", text: "Class" },
-	{ key: "status", text: "Status" },
+	{ key: "jemaat", text: "Jemaat" },
 	{ key: "birth", text: "Birth" },
-	{ key: "parentName", text: "Parent" },
+	{ key: "parent", text: "Parent" },
 	{ key: "contact", text: "Contact" },
+	{ key: "status", text: "Status" },
 ];
 const bodyTable = ref([]);
 
@@ -149,8 +151,10 @@ watch(children, () => {
 			name: child.nama,
 			gender: child.gender,
 			class: child.kelas?.nama || "-",
-
-			birth: DateHelper.formatLocalDate(child.tglLahir),
+			jemaat: child.isJemaat ? "Jemaat" : "Non-Jemaat",
+			birth: DateHelper.formatLocalDate(child.tglLahir) || "-",
+			parent: child.namaParent || "-",
+			contact: child.kontak || "-",
 			status: child.isActive,
 		});
 	});

@@ -1,5 +1,5 @@
 <script setup>
-import { faPencil, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faMars, faPencil, faTrashCan, faVenus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 defineProps({
@@ -35,10 +35,10 @@ defineProps({
 			</thead>
 			<tbody>
 				<tr v-if="isLoading" class="dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-					<td colspan="4" class="px-6 py-4 text-center">Loading...</td>
+					<td :colspan="headers.length" class="px-6 py-4 text-center">Loading...</td>
 				</tr>
 				<tr v-else-if="body.length === 0" class="dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-					<td colspan="4" class="px-6 py-4 text-center">No Data</td>
+					<td :colspan="headers.length" class="px-6 py-4 text-center">No Data</td>
 				</tr>
 				<tr
 					v-else
@@ -66,6 +66,13 @@ defineProps({
 								:class="col ? 'bg-green-500' : 'bg-red-500'"
 							></div>
 							{{ col ? "Active" : "Inactive" }}
+						</div>
+						<div v-else-if="key === 'gender'" class="flex items-center gap-1">
+							<FontAwesomeIcon
+								:icon="col == 'BOY' ? faMars : faVenus"
+								:class="col == 'BOY' ? 'text-cyan-500' : 'text-pink-500'"
+							/>
+							{{ col }}
 						</div>
 						<div v-else>{{ col }}</div>
 					</td>
