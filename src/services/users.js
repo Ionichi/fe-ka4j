@@ -33,6 +33,14 @@ class UserService {
 			throw error.response.data.message;
 		}
 	};
+
+	static deleteUser = async (id) => {
+		try {
+			return await axios.delete("/auth/users/" + id).then((res) => res.data);
+		} catch (error) {
+			throw error.response.data.message;
+		}
+	};
 }
 
 export default UserService;

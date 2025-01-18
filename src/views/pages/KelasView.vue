@@ -122,7 +122,7 @@ const fetchDataKelas = async () => {
 	}
 };
 
-watch(kelas, async () => {
+watch(kelas, () => {
 	bodyTable.value = [];
 	kelas.value.forEach((element) => {
 		bodyTable.value.push({

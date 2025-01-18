@@ -32,7 +32,6 @@ const headerTable = [
 const bodyTable = ref([]);
 
 const showCreateModal = async () => {
-	// users.value = [{ id: "-", username: "-", tglLahir: "2024-01-01", isActive: "-", kelas: { nama: "-" } }];
 	isLoading.value = true;
 	try {
 		const response = await KelasService.getKelas();
@@ -89,28 +88,26 @@ const handleEdit = async (id) => {
 };
 
 const handleDelete = (id) => {
-	// showConfirm.value = true;
-	// dataDel.value = id;
-	console.log(id);
+	showConfirm.value = true;
+	dataDel.value = id;
 };
 
 const handleConfirmSubmit = async (id) => {
-	console.log(id);
-	// isLoading.value = true;
-	// try {
-	// 	const response = await KelasService.deleteKelas(id);
-	// 	fetchDataUsers();
-	// 	handleOnClose();
-	// 	$toast.success(response.message, {
-	// 		position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
-	// 	});
-	// } catch (error) {
-	// 	$toast.error(error, {
-	// 		position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
-	// 	});
-	// } finally {
-	// 	isLoading.value = false;
-	// }
+	isLoading.value = true;
+	try {
+		const response = await UserService.deleteUser(id);
+		fetchDataUsers();
+		handleOnClose();
+		$toast.success(response.message, {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+		});
+	} catch (error) {
+		$toast.error(error, {
+			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+		});
+	} finally {
+		isLoading.value = false;
+	}
 };
 
 const handleOnClose = () => {
@@ -139,7 +136,7 @@ const fetchDataUsers = async () => {
 	}
 };
 
-watch(users, async () => {
+watch(users, () => {
 	bodyTable.value = [];
 	users.value.forEach((user) => {
 		bodyTable.value.push({
@@ -152,7 +149,7 @@ watch(users, async () => {
 	});
 });
 
-onMounted(async () => {
+onMounted(() => {
 	fetchDataUsers();
 });
 </script>
@@ -233,7 +230,7 @@ onMounted(async () => {
 				:on-close="handleOnClose"
 				:is-loading="isLoading"
 				:data-del="dataDel"
-				message="Are you sure you want to deactive this users?"
+				message="Are you sure you want to change this user status?"
 				@handle-confirm-submit="handleConfirmSubmit"
 			/>
 		</div>

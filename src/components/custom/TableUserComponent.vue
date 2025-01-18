@@ -1,5 +1,5 @@
 <script setup>
-import { faPencil, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faPencil, faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 defineProps({
@@ -58,8 +58,8 @@ defineProps({
 								@click="handleEdit(content['id'])"
 							/>
 							<FontAwesomeIcon
-								:icon="faTrashCan"
-								class="text-red-500"
+								:icon="content['status'] ? faToggleOn : faToggleOff"
+								:class="content['status'] ? 'text-green-500' : 'text-red-500'"
 								@click="handleDelete(content['id'])"
 							/>
 						</div>
