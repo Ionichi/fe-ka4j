@@ -59,7 +59,7 @@ const showCreateModal = async () => {
 const handleSubmit = async (data) => {
 	isLoading.value = true;
 	try {
-		const response = await UserService.storeOrUpdateUser(data);
+		const response = await ChildrenService.storeOrUpdateChildren(data);
 		fetchDataChildren();
 		handleOnClose();
 		$toast.success(response.message, {

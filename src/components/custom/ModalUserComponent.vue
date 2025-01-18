@@ -161,7 +161,6 @@ watch(
 					<InputSelectComponent
 						ref="inputKelas"
 						group-name="Class Name"
-						type="text"
 						name="className"
 						placeholder="Ex: Joy"
 						:is-required="true"

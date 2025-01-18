@@ -4,8 +4,6 @@ import ButtonPrimaryComponent from "../main/ButtonPrimaryComponent.vue";
 import ModalComponent from "../main/ModalComponent.vue";
 import InputGroupComponent from "../main/InputGroupComponent.vue";
 import InputSelectComponent from "../main/InputSelectComponent.vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useToast } from "vue-toast-notification";
 import { useActiveElement } from "@vueuse/core";
 import DateHelper from "@/utils/dateHelper";
@@ -24,42 +22,59 @@ const activeElement = useActiveElement();
 
 const userData = reactive({
 	id: "",
-	username: "",
-	password: "",
+	nama: "",
+	gender: "",
 	tglLahir: "",
+	namaParent: "",
+	kontak: "",
+	isJemaat: false,
 	kelas: "",
 });
 
-const inputUsername = ref(null);
-const inputPassword = ref(null);
+const optionsGender = [
+	{ label: "Boy", value: "L" },
+	{ label: "Girl", value: "P" },
+];
+
+const optionsIsJemaat = [
+	{ label: "Jemaat", value: true },
+	{ label: "Non-Jemaat", value: false },
+];
+
+const inputName = ref(null);
+const inputGender = ref(null);
 const inputTglLahir = ref(null);
+const inputParentName = ref(null);
+const inputContact = ref(null);
+const inputIsJemaat = ref(null);
 const inputKelas = ref(null);
 
-const isShowPassword = ref(false);
-
 const isInputValid = () => {
-	return (
-		userData.username &&
-		(dataEdit ? true : userData.password && userData.password.length >= 6) &&
-		userData.tglLahir &&
-		userData.kelas &&
-		(dataEdit ? userData.id : true)
-	);
+	return userData.nama && userData.gender && userData.kelas && userData.isJemaat && (dataEdit ? userData.id : true);
 };
 
 const handleEnter = (event) => {
 	if (event.key === "Enter") {
 		switch (activeElement.value?.dataset?.id) {
-			case "username":
-				inputPassword.value.inputRef.focus();
+			case "name":
+				inputGender.value.inputRef.focus();
 				break;
-			case "password":
-				inputTglLahir.value.inputRef.focus();
-				break;
-			case "birth":
+			case "gender":
 				inputKelas.value.inputRef.focus();
 				break;
 			case "className":
+				inputIsJemaat.value.inputRef.focus();
+				break;
+			case "isJemaat":
+				inputTglLahir.value.inputRef.focus();
+				break;
+			case "birth":
+				inputParentName.value.inputRef.focus();
+				break;
+			case "parentName":
+				inputContact.value.inputRef.focus();
+				break;
+			case "contact":
 				handleSubmit(event);
 				break;
 		}
@@ -77,21 +92,20 @@ const handleSubmit = (event) => {
 	}
 };
 
-const viewPassword = () => {
-	isShowPassword.value = !isShowPassword.value;
-};
-
 watch(
 	() => showModal,
 	async () => {
 		await nextTick();
 		if (showModal) {
-			inputUsername.value.inputRef.focus();
+			inputName.value.inputRef.focus();
 		} else {
 			userData.id = "";
-			userData.username = "";
-			userData.password = "";
+			userData.nama = "";
+			userData.gender = "";
 			userData.tglLahir = "";
+			userData.namaParent = "";
+			userData.kontak = "";
+			userData.isJemaat = false;
 			userData.kelas = "";
 		}
 	}
@@ -101,31 +115,38 @@ watch(
 	() => dataEdit,
 	(data) => {
 		userData.id = data?.id;
-		userData.username = data?.username;
-		userData.password = data?.password;
+		userData.nama = data?.username;
+		userData.gender = data?.password;
 		userData.tglLahir = DateHelper.formatISODate(data?.tglLahir);
+		userData.namaParent = data?.namaParent;
+		userData.kontak = data?.kontak;
+		userData.isJemaat = data?.isJemaat;
 		userData.kelas = data?.kelasId;
 	}
 );
 </script>
 
 <template>
-	<ModalComponent :show-modal="showModal" :on-close="onClose" modal-title="Users Management" :is-loading="isLoading">
+	<ModalComponent
+		:show-modal="showModal"
+		:on-close="onClose"
+		modal-title="Children Management"
+		:is-loading="isLoading"
+	>
 		<template #modalContent>
 			<form class="mt-8 mb-5 space-y-5 md:space-y-7 text-left" action="#">
 				<div class="grid grid-cols-2 gap-5 mb-3">
 					<InputGroupComponent
-						ref="inputUsername"
-						group-name="Username"
+						ref="inputName"
+						group-name="Name"
 						type="text"
-						name="username"
-						placeholder="Ex: fery"
+						name="name"
+						placeholder="Ex: Fery"
 						:is-required="true"
-						v-model="userData.username"
+						v-model="userData.nama"
 						:handleKeyDown="handleEnter"
 						class="w-full"
 						tabindex="1"
-						:is-read-only="dataEdit ? true : false"
 					/>
 					<InputGroupComponent
 						ref="inputTglLahir"
@@ -133,50 +154,73 @@ watch(
 						type="date"
 						name="birth"
 						placeholder="--/--/----"
-						:is-required="true"
+						:is-required="false"
 						v-model="userData.tglLahir"
 						:handleKeyDown="handleEnter"
 						class="w-full"
-						tabindex="3"
+						tabindex="5"
 					/>
-					<div class="grid">
-						<InputGroupComponent
-							ref="inputPassword"
-							group-name="Password"
-							:type="isShowPassword ? 'text' : 'password'"
-							name="password"
-							placeholder="••••••••"
-							:is-required="dataEdit ? false : true"
-							v-model="userData.password"
-							:handleKeyDown="handleEnter"
-							class="w-full row-start-1 col-start-1"
-							tabindex="2"
-						/>
-						<FontAwesomeIcon
-							:icon="isShowPassword ? faEye : faEyeSlash"
-							class="z-10 right-3 top-3.5 relative col-start-1 row-start-1 h-4 w-4 self-center justify-self-end"
-							@click="viewPassword"
-						/>
-					</div>
+					<InputSelectComponent
+						ref="inputGender"
+						group-name="Gender"
+						name="gender"
+						placeholder="Ex: Boy"
+						:is-required="true"
+						v-model="userData.gender"
+						:handleKeyDown="handleEnter"
+						class="w-full"
+						tabindex="2"
+						:options="optionsGender"
+					/>
+					<InputGroupComponent
+						ref="inputParentName"
+						group-name="Parent Name"
+						type="text"
+						name="parentName"
+						placeholder="Ex: Feryandi"
+						:is-required="false"
+						v-model="userData.namaParent"
+						:handleKeyDown="handleEnter"
+						class="w-full"
+						tabindex="6"
+					/>
 					<InputSelectComponent
 						ref="inputKelas"
 						group-name="Class Name"
-						type="text"
 						name="className"
 						placeholder="Ex: Joy"
 						:is-required="true"
 						v-model="userData.kelas"
 						:handleKeyDown="handleEnter"
 						class="w-full"
-						tabindex="4"
+						tabindex="3"
 						:options="optionsKelas"
 					/>
+					<InputGroupComponent
+						ref="inputContact"
+						group-name="Contact"
+						type="text"
+						name="contact"
+						placeholder="Ex: 08** **** ****"
+						:is-required="false"
+						v-model="userData.kontak"
+						:handleKeyDown="handleEnter"
+						class="w-full"
+						tabindex="7"
+					/>
+					<InputSelectComponent
+						ref="inputIsJemaat"
+						group-name="Jemaat"
+						name="isJemaat"
+						placeholder="Ex: Jemaat"
+						:is-required="true"
+						v-model="userData.isJemaat"
+						:handleKeyDown="handleEnter"
+						class="w-full"
+						tabindex="4"
+						:options="optionsIsJemaat"
+					/>
 				</div>
-				<span class="text-sm text-gray-600">- Password field must be at least 6 characters</span>
-				<br />
-				<span v-if="dataEdit" class="text-sm text-gray-600 mt-2">
-					- Leave password field blank to keep current password.
-				</span>
 			</form>
 		</template>
 		<template #modalButton>
