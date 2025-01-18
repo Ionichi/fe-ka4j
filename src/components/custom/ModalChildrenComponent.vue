@@ -32,8 +32,8 @@ const userData = reactive({
 });
 
 const optionsGender = [
-	{ label: "Boy", value: "L" },
-	{ label: "Girl", value: "P" },
+	{ label: "Boy", value: "BOY" },
+	{ label: "Girl", value: "GIRL" },
 ];
 
 const optionsIsJemaat = [
@@ -115,8 +115,8 @@ watch(
 	() => dataEdit,
 	(data) => {
 		userData.id = data?.id;
-		userData.nama = data?.username;
-		userData.gender = data?.password;
+		userData.nama = data?.nama;
+		userData.gender = data?.gender;
 		userData.tglLahir = DateHelper.formatISODate(data?.tglLahir);
 		userData.namaParent = data?.namaParent;
 		userData.kontak = data?.kontak;

@@ -2,7 +2,6 @@
 import ButtonPrimaryComponent from "@/components/main/ButtonPrimaryComponent.vue";
 import HeaderComponent from "@/components/main/HeaderComponent.vue";
 import SidebarComponent from "@/components/main/SidebarComponent.vue";
-import UserService from "@/services/users";
 import DateHelper from "@/utils/dateHelper";
 import { onMounted, ref, watch } from "vue";
 import { useToast } from "vue-toast-notification";
@@ -77,9 +76,9 @@ const handleSubmit = async (data) => {
 const handleEdit = async (id) => {
 	isLoading.value = true;
 	try {
-		const response = await UserService.getUserById(id);
+		const response = await ChildrenService.getChildrenById(id);
 		dataEdit.value = null;
-		dataEdit.value = response.data.user;
+		dataEdit.value = response.data.children;
 		await showCreateModal();
 
 		$toast.success(response.message, {
@@ -102,7 +101,7 @@ const handleDelete = (id) => {
 const handleConfirmSubmit = async (id) => {
 	isLoading.value = true;
 	try {
-		const response = await UserService.deleteUser(id);
+		const response = await ChildrenService.deleteChildren(id);
 		fetchDataChildren();
 		handleOnClose();
 		$toast.success(response.message, {
