@@ -14,14 +14,64 @@
 		/>
 		<meta content="Ionichi" name="author" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta
-			http-equiv="Content-Security-Policy"
-			content="upgrade-insecure-requests"
-		/>
+		<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+		<meta name="google" content="notranslate" />
 		<title>KA4J - Kids Army For Jesus</title>
+		<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 	</head>
-	<body>
-		<div id="app"></div>
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+		}
+
+		#app {
+			overflow: hidden;
+		}
+
+		[v-cloak] > * {
+			display: none;
+		}
+
+		[v-cloak]::before {
+			height: 100vh;
+			width: 100vw;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			content: url("/logo.png");
+			font-size: 32px;
+			animation: scaleUp 1.5s linear infinite;
+		}
+
+		@media (max-width: 576px) {
+			[v-cloak]::before {
+				width: 80vw;
+				margin: 0 auto;
+			}
+		}
+
+		@keyframes scaleUp {
+			0% {
+				scale: 0.4;
+			}
+
+			50% {
+				scale: 0.5;
+			}
+
+			100% {
+				scale: 0.4;
+			}
+		}
+	</style>
+	<body oncontextmenu="return false">
+		<noscript>
+			<strong>
+				We're sorry but KA4J doesn't work properly without JavaScript enabled. Please enable it to continue.
+			</strong>
+		</noscript>
+		<div id="app" v-cloak></div>
 		<script type="module" src="/src/main.js"></script>
 	</body>
 </html>
