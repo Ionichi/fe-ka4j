@@ -10,10 +10,6 @@ defineProps({
 		type: Boolean,
 		default: false,
 	},
-	icon: {
-		type: String,
-		default: null,
-	},
 	onClick: Function,
 	isDisabled: {
 		type: Boolean,
@@ -34,8 +30,8 @@ defineProps({
 				: 'bg-slate-900 hover:bg-slate-700 dark:bg-sky-500 dark:hover:bg-sky-400'
 		"
 	>
+		<slot v-if="!isLoading" name="icon"></slot>
 		<LoadingComponent v-if="isLoading" />
 		{{ isLoading ? "Loading..." : text }}
-		{{ icon }}
 	</button>
 </template>
