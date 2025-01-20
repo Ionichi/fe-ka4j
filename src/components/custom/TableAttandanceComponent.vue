@@ -1,7 +1,4 @@
 <script setup>
-import { faPencil, faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
 defineProps({
 	headers: {
 		type: Array,
@@ -12,8 +9,9 @@ defineProps({
 		required: true,
 	},
 	isLoading: Boolean,
-	handleEdit: Function,
-	handleDelete: Function,
+	handleCheck: Function,
+	handleCheckAll: Function,
+	isCheckedAll: Boolean,
 });
 </script>
 
@@ -27,12 +25,12 @@ defineProps({
 						scope="col"
 						class="px-6 py-3"
 						:key="header['key']"
-						:style="index == 0 && 'width: 80px'"
+						:style="index == 0 && 'width: 50%'"
 					>
-						<label v-if="header['key'] == 'action'" class="flex gap-3 items-center">
-							<input type="checkbox" class="w-6 h-6" />
-							Action
-						</label>
+						<div v-if="header['key'] == 'action'" class="flex gap-5 items-center">
+							<input type="checkbox" class="w-6 h-6" @change="handleCheckAll" :checked="isCheckedAll" />
+							Status
+						</div>
 						<div v-else>
 							{{ header["text"] }}
 						</div>
@@ -57,40 +55,24 @@ defineProps({
 					]"
 				>
 					<td class="px-6 py-4">
-						<div class="flex gap-5 cursor-pointer text-lg">
-							<input type="checkbox" class="w-6 h-6" />
-							<FontAwesomeIcon
-								:icon="faPencil"
-								class="text-yellow-500 dark:text-white"
-								@click="handleEdit(content['id'])"
+						<div class="flex gap-5 cursor-pointer">
+							<input
+								type="checkbox"
+								class="w-6 h-6"
+								@change="handleCheck(content['id'])"
+								:checked="content['status']"
 							/>
-							<FontAwesomeIcon
-								:icon="content['status'] ? faToggleOn : faToggleOff"
-								:class="content['status'] ? 'text-green-500' : 'text-red-500'"
-								@click="handleDelete(content['id'])"
-							/>
-						</div>
-					</td>
-					<th
-						scope="row"
-						class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-					>
-						<div>
-							<div class="text-base font-semibold">{{ content["username"] }}</div>
-							<div class="font-normal text-gray-500">
-								{{ content["birth"] }}
+							<div class="flex items-center">
+								<div
+									class="h-2.5 w-2.5 rounded-full me-2"
+									:class="content['status'] ? 'bg-green-500' : 'bg-red-500'"
+								></div>
+								{{ content["status"] ? "Present" : "Absent" }}
 							</div>
 						</div>
-					</th>
-					<td class="px-6 py-4">{{ content["class"] }}</td>
-					<td class="px-6 py-4">
-						<div class="flex items-center">
-							<div
-								class="h-2.5 w-2.5 rounded-full me-2"
-								:class="content['status'] ? 'bg-green-500' : 'bg-red-500'"
-							></div>
-							{{ content["status"] ? "Present" : "Absent" }}
-						</div>
+					</td>
+					<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-base">
+						{{ content["username"] }}
 					</td>
 				</tr>
 			</tbody>
