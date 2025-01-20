@@ -56,7 +56,7 @@ const handleCheckAll = (event) => {
 const fetchDataAttendance = async () => {
 	isLoading.value = true;
 	try {
-		const response = await TeacherAttendanceService.getAttendance(attendanceDate);
+		const response = await TeacherAttendanceService.getAttendance(attendanceDate.value);
 		attendance.value = null;
 		attendance.value = response.data.absensiMentor;
 		isCheckedAll.value = attendance.value.every((data) => data.isPresent);
