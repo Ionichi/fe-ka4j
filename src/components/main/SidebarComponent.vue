@@ -10,8 +10,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { RouterLink } from "vue-router";
+import { useToast } from "vue-toast-notification";
 
 const menu = useMenu();
+const $toast = useToast();
+const comingSoon = () => {
+	$toast.info("Coming soon...", {
+		position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+	});
+};
 </script>
 
 <template>
@@ -58,6 +65,7 @@ const menu = useMenu();
 					<a
 						href="#"
 						class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+						@click="comingSoon"
 					>
 						<FontAwesomeIcon :icon="faInbox" class="text-xl" />
 						<span class="flex-1 ms-3 whitespace-nowrap">Inbox</span>
