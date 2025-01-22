@@ -50,7 +50,7 @@ const inputIsJemaat = ref(null);
 const inputKelas = ref(null);
 
 const isInputValid = () => {
-	return userData.nama && userData.gender && userData.kelas && userData.isJemaat && (dataEdit ? userData.id : true);
+	return userData.nama && userData.gender && userData.kelas && (dataEdit ? userData.id : true);
 };
 
 const handleEnter = (event) => {

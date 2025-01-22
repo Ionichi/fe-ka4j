@@ -9,6 +9,7 @@ import KelasView from "@/views/pages/KelasView.vue";
 import ChildrenView from "@/views/pages/ChildrenView.vue";
 import { useToast } from "vue-toast-notification";
 import TeacherAttendanceView from "@/views/pages/TeacherAttendanceView.vue";
+import ChildrenAttendanceView from "@/views/pages/ChildrenAttendanceView.vue";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,14 @@ const router = createRouter({
 			path: "/children",
 			name: "children",
 			component: ChildrenView,
+			meta: {
+				requiresAuth: true,
+			},
+		},
+		{
+			path: "/children-attendance",
+			name: "children-attendance",
+			component: ChildrenAttendanceView,
 			meta: {
 				requiresAuth: true,
 			},

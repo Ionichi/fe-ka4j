@@ -12,6 +12,9 @@ defineProps({
 	handleCheck: Function,
 	handleCheckAll: Function,
 	isCheckedAll: Boolean,
+	handleDevotion: Function,
+	handleExtras: Function,
+	handleNotes: Function,
 });
 </script>
 
@@ -25,7 +28,7 @@ defineProps({
 						scope="col"
 						class="px-6 py-3"
 						:key="header['key']"
-						:style="index == 0 && 'width: 50%'"
+						:colspan="index == headers.length - 1 && '2'"
 					>
 						<div v-if="header['key'] == 'action'" class="flex gap-5 items-center">
 							<input type="checkbox" class="w-6 h-6" @change="handleCheckAll" :checked="isCheckedAll" />
@@ -39,10 +42,10 @@ defineProps({
 			</thead>
 			<tbody>
 				<tr v-if="isLoading" class="dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-					<td colspan="4" class="px-6 py-4 text-center">Loading...</td>
+					<td :colspan="headers.length" class="px-6 py-4 text-center">Loading...</td>
 				</tr>
 				<tr v-else-if="body.length === 0" class="dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-					<td colspan="4" class="px-6 py-4 text-center">No Data</td>
+					<td :colspan="headers.length" class="px-6 py-4 text-center">No Data</td>
 				</tr>
 				<tr
 					v-else
@@ -54,12 +57,12 @@ defineProps({
 						index != body.length - 1 && 'border-b dark:border-gray-700',
 					]"
 				>
-					<td class="px-6 py-4">
-						<div class="flex gap-5 cursor-pointer">
+					<td v-for="(col, key) in content" :key="key" class="px-6 py-4">
+						<div v-if="key === 'id'" class="flex gap-5 cursor-pointer">
 							<input
 								type="checkbox"
 								class="w-6 h-6"
-								@change="handleCheck(content['id'])"
+								@change="handleCheck(col)"
 								:checked="content['status']"
 							/>
 							<div class="flex items-center">
@@ -70,12 +73,41 @@ defineProps({
 								{{ content["status"] ? "Present" : "Absent" }}
 							</div>
 						</div>
-					</td>
-					<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-base">
-						{{ content["username"] }}
+						<div v-else-if="key === 'isDevotion'" class="flex items-center">
+							<input
+								type="checkbox"
+								class="w-6 h-6"
+								@change="handleDevotion(content['id'])"
+								:checked="col"
+							/>
+						</div>
+						<div v-else-if="key === 'status'"></div>
+						<div v-else-if="key === 'extras'">
+							<input
+								type="number"
+								min="0"
+								:value="col"
+								class="bg-transparent w-12 focus:outline-none border-b-2 border-gray-100"
+								@keyup="handleExtras(content['id'], $event.target.value)"
+							/>
+						</div>
+						<div v-else-if="key === 'notes'">
+							<textarea
+								rows="1"
+								:value="col"
+								class="bg-transparent w-40 focus:outline-none border-b-2 border-gray-100"
+								@change="handleNotes(content['id'], $event.target.value)"
+							/>
+						</div>
+						<div v-else>{{ col }}</div>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 </template>
+<style scoped>
+input[type="number"]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+</style>
