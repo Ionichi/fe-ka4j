@@ -314,7 +314,8 @@ onMounted(async () => {
 				:handle-extras="handleExtras"
 				:handle-notes="handleNotes"
 			/>
-			<div class="flex justify-end items-center mt-5">
+			<div class="flex justify-between items-center mt-5">
+				<span class="text-gray-500">Notes: Remember to save when you adding children</span>
 				<div>
 					<ButtonPrimaryComponent
 						class="text-sm h-10"
