@@ -23,6 +23,7 @@ const attendanceDate = ref(DateHelper.formatISODate(new Date()));
 const selectedKelas = ref("");
 const dataOptionsKelas = ref(null);
 const dataOptionsChildren = ref(null);
+const totalCoupon = ref(0);
 
 const isLoading = ref(false);
 const isCheckedAll = ref(false);
@@ -200,6 +201,10 @@ watch(attendance, () => {
 		});
 	});
 
+	totalCoupon.value = attendance.value.reduce((total, data) => {
+		return total + (data.isPresent ? 1 : 0) + (data.isDevotion ? 1 : 0) + parseInt(data.extras || 0);
+	}, 0);
+
 	isCheckedAll.value = attendance.value.every((data) => data.isPresent);
 });
 
@@ -314,6 +319,10 @@ onMounted(async () => {
 				:handle-extras="handleExtras"
 				:handle-notes="handleNotes"
 			/>
+			<div class="flex justify-end items-center mt-2 gap-3">
+				<span>Total Coupon: </span>
+				<span>{{ totalCoupon }}</span>
+			</div>
 			<div class="flex justify-between items-center mt-5">
 				<span class="text-gray-500">Notes: Remember to save when you adding children</span>
 				<div>
