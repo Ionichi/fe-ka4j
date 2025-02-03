@@ -8,6 +8,8 @@ import UserView from "@/views/pages/UserView.vue";
 import KelasView from "@/views/pages/KelasView.vue";
 import ChildrenView from "@/views/pages/ChildrenView.vue";
 import { useToast } from "vue-toast-notification";
+import TeacherAttendanceView from "@/views/pages/TeacherAttendanceView.vue";
+import ChildrenAttendanceView from "@/views/pages/ChildrenAttendanceView.vue";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,6 +43,14 @@ const router = createRouter({
 			},
 		},
 		{
+			path: "/children-attendance",
+			name: "children-attendance",
+			component: ChildrenAttendanceView,
+			meta: {
+				requiresAuth: true,
+			},
+		},
+		{
 			path: "/class",
 			name: "class",
 			component: KelasView,
@@ -61,6 +71,15 @@ const router = createRouter({
 			path: "/users",
 			name: "users",
 			component: UserView,
+			meta: {
+				requiresAuth: true,
+				requiresAdmin: true,
+			},
+		},
+		{
+			path: "/teacher-attendance",
+			name: "teacher-attendance",
+			component: TeacherAttendanceView,
 			meta: {
 				requiresAuth: true,
 				requiresAdmin: true,

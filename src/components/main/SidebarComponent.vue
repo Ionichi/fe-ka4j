@@ -10,8 +10,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { RouterLink } from "vue-router";
+import { useToast } from "vue-toast-notification";
 
 const menu = useMenu();
+const $toast = useToast();
+const comingSoon = () => {
+	$toast.info("Coming soon...", {
+		position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
+	});
+};
 </script>
 
 <template>
@@ -46,18 +53,19 @@ const menu = useMenu();
 					</RouterLink>
 				</li>
 				<li>
-					<a
-						href="#"
+					<RouterLink
+						to="/teacher-attendance"
 						class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
 					>
 						<FontAwesomeIcon :icon="faChalkboard" />
 						<span class="flex-1 ms-3 whitespace-nowrap">Teacher's Attendance</span>
-					</a>
+					</RouterLink>
 				</li>
 				<li>
 					<a
 						href="#"
 						class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+						@click="comingSoon"
 					>
 						<FontAwesomeIcon :icon="faInbox" class="text-xl" />
 						<span class="flex-1 ms-3 whitespace-nowrap">Inbox</span>
@@ -95,13 +103,13 @@ const menu = useMenu();
 					</RouterLink>
 				</li>
 				<li>
-					<a
-						href="#"
+					<RouterLink
+						to="/children-attendance"
 						class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
 					>
 						<FontAwesomeIcon :icon="faClipboardUser" />
 						<span class="flex-1 ms-3 whitespace-nowrap">Children's Attendance</span>
-					</a>
+					</RouterLink>
 				</li>
 			</ul>
 		</div>

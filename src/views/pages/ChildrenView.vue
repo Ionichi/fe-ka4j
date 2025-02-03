@@ -3,7 +3,7 @@ import ButtonPrimaryComponent from "@/components/main/ButtonPrimaryComponent.vue
 import HeaderComponent from "@/components/main/HeaderComponent.vue";
 import SidebarComponent from "@/components/main/SidebarComponent.vue";
 import DateHelper from "@/utils/dateHelper";
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useToast } from "vue-toast-notification";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
@@ -12,12 +12,14 @@ import KelasService from "@/services/kelas";
 import ModalChildrenComponent from "@/components/custom/ModalChildrenComponent.vue";
 import ChildrenService from "@/services/children";
 import TableBaseComponent from "@/components/main/TableBaseComponent.vue";
+import { debounce } from "lodash";
 
 const $toast = useToast();
 const children = ref([]);
 const dataEdit = ref(null);
 const dataDel = ref(null);
 const dataOptionsKelas = ref(null);
+const searchQuery = ref("");
 
 const isLoading = ref(false);
 const showModal = ref(false);
@@ -142,6 +144,22 @@ const fetchDataChildren = async () => {
 	}
 };
 
+const handleSearch = debounce((event) => {
+	searchQuery.value = event.target.value;
+}, 500);
+
+const filteredTableData = computed(() => {
+	if (!searchQuery.value) {
+		return bodyTable.value;
+	}
+
+	return bodyTable.value.filter((row) => {
+		return Object.values(row).some((value) => {
+			return String(value).toLowerCase().includes(searchQuery.value.toLowerCase());
+		});
+	});
+});
+
 watch(children, () => {
 	bodyTable.value = [];
 	children.value.forEach((child) => {
@@ -204,6 +222,7 @@ onMounted(() => {
 								id="table-search"
 								class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-full xs:w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 								placeholder="Search for children"
+								@input="handleSearch"
 							/>
 						</div>
 					</div>
@@ -220,7 +239,7 @@ onMounted(() => {
 			</div>
 			<TableBaseComponent
 				:headers="headerTable"
-				:body="bodyTable"
+				:body="filteredTableData"
 				:is-loading="isLoading"
 				:handle-edit="handleEdit"
 				:handle-delete="handleDelete"

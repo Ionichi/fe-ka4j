@@ -2,80 +2,35 @@
 import ButtonPrimaryComponent from "@/components/main/ButtonPrimaryComponent.vue";
 import HeaderComponent from "@/components/main/HeaderComponent.vue";
 import SidebarComponent from "@/components/main/SidebarComponent.vue";
-import TableUserComponent from "@/components/custom/TableUserComponent.vue";
-import UserService from "@/services/users";
-import DateHelper from "@/utils/dateHelper";
 import { computed, onMounted, ref, watch } from "vue";
 import { useToast } from "vue-toast-notification";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
-import ModalConfirm from "@/components/custom/ModalConfirm.vue";
-import ModalUserComponent from "@/components/custom/ModalUserComponent.vue";
-import KelasService from "@/services/kelas";
+import { faArrowsRotate, faSave } from "@fortawesome/free-solid-svg-icons";
 import { debounce } from "lodash";
+import TableAttandanceComponent from "@/components/custom/TableAttandanceComponent.vue";
+import InputGroupComponent from "@/components/main/InputGroupComponent.vue";
+import TeacherAttendanceService from "@/services/teacherAttendance";
+import DateHelper from "@/utils/dateHelper";
 
 const $toast = useToast();
-const users = ref([]);
-const dataEdit = ref(null);
-const dataDel = ref(null);
-const dataOptionsKelas = ref(null);
+const attendance = ref([]);
 const searchQuery = ref("");
+const attendanceDate = ref(DateHelper.formatISODate(new Date()));
 
 const isLoading = ref(false);
-const showModal = ref(false);
-const showConfirm = ref(false);
+const isCheckedAll = ref(false);
 
 const headerTable = [
 	{ key: "action", text: "Action" },
 	{ key: "username", text: "Username" },
-	{ key: "class", text: "Class" },
-	{ key: "status", text: "Status" },
 ];
 const bodyTable = ref([]);
 
-const showCreateModal = async () => {
+const handleSubmit = async () => {
 	isLoading.value = true;
 	try {
-		const response = await KelasService.getKelas();
-		dataOptionsKelas.value = response.data.kelas.map((data) => {
-			return { label: data.nama, value: data.id };
-		});
-
-		showModal.value = true;
-	} catch (error) {
-		$toast.error(error, {
-			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
-		});
-	} finally {
-		isLoading.value = false;
-	}
-};
-
-const handleSubmit = async (data) => {
-	isLoading.value = true;
-	try {
-		const response = await UserService.storeOrUpdateUser(data);
-		fetchDataUsers();
-		handleOnClose();
-		$toast.success(response.message, {
-			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
-		});
-	} catch (error) {
-		$toast.error(error, {
-			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
-		});
-	} finally {
-		isLoading.value = false;
-	}
-};
-
-const handleEdit = async (id) => {
-	isLoading.value = true;
-	try {
-		const response = await UserService.getUserById(id);
-		dataEdit.value = null;
-		dataEdit.value = response.data.user;
-		await showCreateModal();
+		const response = await TeacherAttendanceService.storeOrUpdateAttendance(attendanceDate.value, attendance.value);
+		fetchDataAttendance();
 
 		$toast.success(response.message, {
 			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
@@ -89,42 +44,22 @@ const handleEdit = async (id) => {
 	}
 };
 
-const handleDelete = (id) => {
-	showConfirm.value = true;
-	dataDel.value = id;
+const handleCheck = (id) => {
+	attendance.value = attendance.value.map((data) => (data.id == id ? { ...data, isPresent: !data.isPresent } : data));
 };
 
-const handleConfirmSubmit = async (id) => {
+const handleCheckAll = (event) => {
+	const isCheckAll = event.target.checked;
+	attendance.value = attendance.value.map((data) => ({ ...data, isPresent: isCheckAll }));
+};
+
+const fetchDataAttendance = async () => {
 	isLoading.value = true;
 	try {
-		const response = await UserService.deleteUser(id);
-		fetchDataUsers();
-		handleOnClose();
-		$toast.success(response.message, {
-			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
-		});
-	} catch (error) {
-		$toast.error(error, {
-			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
-		});
-	} finally {
-		isLoading.value = false;
-	}
-};
-
-const handleOnClose = () => {
-	showModal.value = false;
-	showConfirm.value = false;
-	dataEdit.value = null;
-	dataDel.value = null;
-};
-
-const fetchDataUsers = async () => {
-	isLoading.value = true;
-	try {
-		const response = await UserService.getUsers();
-		users.value = null;
-		users.value = response.data.users;
+		const response = await TeacherAttendanceService.getAttendance(attendanceDate.value);
+		attendance.value = null;
+		attendance.value = response.data.absensiMentor;
+		isCheckedAll.value = attendance.value.every((data) => data.isPresent);
 
 		$toast.success(response.message, {
 			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
@@ -154,21 +89,25 @@ const filteredTableData = computed(() => {
 	});
 });
 
-watch(users, () => {
+watch(attendance, () => {
 	bodyTable.value = [];
-	users.value.forEach((user) => {
+	attendance.value.forEach((data) => {
 		bodyTable.value.push({
-			id: user.id,
-			username: user.username,
-			birth: DateHelper.formatLocalDate(user.tglLahir),
-			class: user.kelas?.nama || "-",
-			status: user.isActive,
+			id: data.id,
+			username: data.username,
+			status: data.isPresent,
 		});
 	});
+
+	isCheckedAll.value = attendance.value.every((data) => data.isPresent);
+});
+
+watch(attendanceDate, () => {
+	fetchDataAttendance();
 });
 
 onMounted(() => {
-	fetchDataUsers();
+	fetchDataAttendance();
 });
 </script>
 
@@ -181,7 +120,7 @@ onMounted(() => {
 			class="min-h-screen p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 dark:text-white mt-20"
 		>
 			<div class="text-2xl font-bold mb-5">
-				<span>User Management</span>
+				<span>Teacher's Attendance</span>
 			</div>
 			<div class="flex justify-between items-center mb-5 flex-wrap gap-3">
 				<div class="flex items-center gap-3">
@@ -220,38 +159,43 @@ onMounted(() => {
 						:icon="faArrowsRotate"
 						class="text-2xl"
 						:class="isLoading && 'animate-spin'"
-						@click="fetchDataUsers"
+						@click="fetchDataAttendance"
 					/>
 				</div>
-				<div>
-					<ButtonPrimaryComponent class="text-sm h-10" text="Create" @click="showCreateModal" />
-				</div>
+				<InputGroupComponent
+					ref="inputTgl"
+					group-name=""
+					type="date"
+					name="date"
+					placeholder="--/--/----"
+					v-model="attendanceDate"
+					class="w-40"
+					tabindex="3"
+				/>
 			</div>
-			<TableUserComponent
+			<TableAttandanceComponent
 				:headers="headerTable"
 				:body="filteredTableData"
 				:is-loading="isLoading"
-				:handle-edit="handleEdit"
-				:handle-delete="handleDelete"
+				:handle-check="handleCheck"
+				:handle-check-all="handleCheckAll"
+				:is-checked-all="isCheckedAll"
 			/>
-
-			<ModalUserComponent
-				:show-modal="showModal"
-				:on-close="handleOnClose"
-				:is-loading="isLoading"
-				:data-edit="dataEdit"
-				:options-kelas="dataOptionsKelas"
-				@handle-submit="handleSubmit"
-			/>
-
-			<ModalConfirm
-				:show-modal="showConfirm"
-				:on-close="handleOnClose"
-				:is-loading="isLoading"
-				:data-del="dataDel"
-				message="Are you sure you want to change this user status?"
-				@handle-confirm-submit="handleConfirmSubmit"
-			/>
+			<div class="flex justify-end items-center mt-5">
+				<div>
+					<ButtonPrimaryComponent
+						class="text-sm h-10"
+						text="Save"
+						:is-loading="isLoading"
+						:is-disabled="isLoading"
+						@click="handleSubmit"
+					>
+						<template #icon>
+							<FontAwesomeIcon :icon="faSave" />
+						</template>
+					</ButtonPrimaryComponent>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>

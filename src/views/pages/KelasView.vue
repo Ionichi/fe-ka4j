@@ -8,13 +8,15 @@ import TableBaseComponent from "@/components/main/TableBaseComponent.vue";
 import KelasService from "@/services/kelas";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { onMounted, ref, watch } from "vue";
+import { debounce } from "lodash";
+import { computed, onMounted, ref, watch } from "vue";
 import { useToast } from "vue-toast-notification";
 
 const $toast = useToast();
 const kelas = ref([]);
 const dataEdit = ref(null);
 const dataDel = ref(null);
+const searchQuery = ref("");
 
 const isLoading = ref(false);
 const showModal = ref(false);
@@ -122,6 +124,22 @@ const fetchDataKelas = async () => {
 	}
 };
 
+const handleSearch = debounce((event) => {
+	searchQuery.value = event.target.value;
+}, 500);
+
+const filteredTableData = computed(() => {
+	if (!searchQuery.value) {
+		return bodyTable.value;
+	}
+
+	return bodyTable.value.filter((row) => {
+		return Object.values(row).some((value) => {
+			return String(value).toLowerCase().includes(searchQuery.value.toLowerCase());
+		});
+	});
+});
+
 watch(kelas, () => {
 	bodyTable.value = [];
 	kelas.value.forEach((element) => {
@@ -178,6 +196,7 @@ onMounted(() => {
 								id="table-search"
 								class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-full xs:w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 								placeholder="Search for class"
+								@input="handleSearch"
 							/>
 						</div>
 					</div>
@@ -194,7 +213,7 @@ onMounted(() => {
 			</div>
 			<TableBaseComponent
 				:headers="headerTable"
-				:body="bodyTable"
+				:body="filteredTableData"
 				:is-loading="isLoading"
 				:handle-edit="handleEdit"
 				:handle-delete="handleDelete"

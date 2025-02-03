@@ -27,6 +27,11 @@ defineProps({
 		type: [Array, null],
 		required: true,
 	},
+	defaultOptionLabel: {
+		type: String,
+		default: "-- Choose --",
+		required: false,
+	},
 });
 
 const inputRef = ref(null);
@@ -54,7 +59,7 @@ const inputModel = defineModel();
 				v-model="inputModel"
 				:tabindex="tabindex"
 			>
-				<option value="">-- Choose --</option>
+				<option value="">{{ defaultOptionLabel }}</option>
 				<option v-for="(option, index) in options" :key="index" :value="option['value']">
 					{{ option["label"] }}
 				</option>
