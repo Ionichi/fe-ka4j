@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
 					rewrite: (path) => path.replace(/^\/api\/v1/, ""),
 				},
 			},
+			https: false,
 		},
 		plugins: [vue()],
 		build: {
