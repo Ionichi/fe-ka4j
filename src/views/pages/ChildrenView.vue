@@ -191,7 +191,7 @@ onMounted(() => {
 			class="min-h-screen p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 dark:text-white mt-20"
 		>
 			<div class="text-2xl font-bold mb-5">
-				<span>Children Management</span>
+				<span>Kids Management</span>
 			</div>
 			<div class="flex justify-between items-center mb-5 flex-wrap gap-3">
 				<div class="flex items-center gap-3">
@@ -221,7 +221,7 @@ onMounted(() => {
 								type="text"
 								id="table-search"
 								class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-full xs:w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-								placeholder="Search for children"
+								placeholder="Search for kids..."
 								@input="handleSearch"
 							/>
 						</div>

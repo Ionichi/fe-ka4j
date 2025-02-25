@@ -35,16 +35,16 @@ const router = createRouter({
 			component: LoginView,
 		},
 		{
-			path: "/children",
-			name: "children",
+			path: "/kids",
+			name: "kids",
 			component: ChildrenView,
 			meta: {
 				requiresAuth: true,
 			},
 		},
 		{
-			path: "/children-attendance",
-			name: "children-attendance",
+			path: "/kids-attendance",
+			name: "kids-attendance",
 			component: ChildrenAttendanceView,
 			meta: {
 				requiresAuth: true,
@@ -68,8 +68,8 @@ const router = createRouter({
 			},
 		},
 		{
-			path: "/users",
-			name: "users",
+			path: "/teachers",
+			name: "teachers",
 			component: UserView,
 			meta: {
 				requiresAuth: true,
