@@ -1,24 +1,10 @@
 <script setup>
 import { useMenu } from "@/stores/menu";
-import {
-	faChalkboard,
-	faChildren,
-	faClipboardUser,
-	faInbox,
-	faLandmark,
-	faUsers,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChalkboard, faChildren, faClipboardUser, faLandmark, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { RouterLink } from "vue-router";
-import { useToast } from "vue-toast-notification";
 
 const menu = useMenu();
-const $toast = useToast();
-const comingSoon = () => {
-	$toast.info("Coming soon...", {
-		position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
-	});
-};
 </script>
 
 <template>
@@ -62,26 +48,12 @@ const comingSoon = () => {
 					</RouterLink>
 				</li>
 				<li>
-					<a
-						href="#"
-						class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-						@click="comingSoon"
-					>
-						<FontAwesomeIcon :icon="faInbox" class="text-xl" />
-						<span class="flex-1 ms-3 whitespace-nowrap">Inbox</span>
-						<span
-							class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300"
-							>0</span
-						>
-					</a>
-				</li>
-				<li>
 					<RouterLink
-						to="/users"
+						to="/teachers"
 						class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
 					>
 						<FontAwesomeIcon :icon="faUsers" class="text-md" />
-						<span class="flex-1 ms-3 whitespace-nowrap">Users</span>
+						<span class="flex-1 ms-3 whitespace-nowrap">Teachers</span>
 					</RouterLink>
 				</li>
 				<li>
@@ -95,20 +67,20 @@ const comingSoon = () => {
 				</li>
 				<li>
 					<RouterLink
-						to="/children"
+						to="/kids"
 						class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
 					>
 						<FontAwesomeIcon :icon="faChildren" />
-						<span class="flex-1 ms-3 whitespace-nowrap">Children</span>
+						<span class="flex-1 ms-3 whitespace-nowrap">Kids</span>
 					</RouterLink>
 				</li>
 				<li>
 					<RouterLink
-						to="/children-attendance"
+						to="/kids-attendance"
 						class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
 					>
 						<FontAwesomeIcon :icon="faClipboardUser" />
-						<span class="flex-1 ms-3 whitespace-nowrap">Children's Attendance</span>
+						<span class="flex-1 ms-3 whitespace-nowrap">Kids's Attendance</span>
 					</RouterLink>
 				</li>
 			</ul>
