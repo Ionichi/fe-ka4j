@@ -13,6 +13,8 @@ const dataCard = reactive({
 	totalCoupon: 0,
 	totalBoyChildren: 0,
 	totalGirlChildren: 0,
+	totalChildrenByClass: [],
+	totalCouponByClass: [],
 });
 const isLoading = ref(false);
 
@@ -25,6 +27,8 @@ const fetchData = async () => {
 		dataCard.totalCoupon = response.data.totalCoupon;
 		dataCard.totalBoyChildren = response.data.totalBoyChildren;
 		dataCard.totalGirlChildren = response.data.totalGirlChildren;
+		dataCard.totalChildrenByClass = response.data.totalChildrenByClass;
+		dataCard.totalCouponByClass = response.data.totalCouponByClass;
 
 		$toast.success(response.message, {
 			position: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "top" : "top-right",
@@ -49,7 +53,7 @@ onMounted(() => {
 
 	<div class="p-4 sm:ml-64 min-h-screen">
 		<div v-if="!isLoading" class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-20">
-			<div class="grid grid-cols-3 gap-4 mb-4">
+			<div class="grid grid-cols-2 gap-4 mb-4">
 				<div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800 flex-col">
 					<h1 class="text-gray-900 dark:text-white font-semibold text-lg">Total Class</h1>
 					<span class="text-gray-900 dark:text-white font-bold text-3xl">
@@ -62,10 +66,19 @@ onMounted(() => {
 						{{ dataCard.totalChildren || "-" }}
 					</span>
 				</div>
-				<div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800 flex-col">
-					<h1 class="text-gray-900 dark:text-white font-semibold text-lg">Total Coupon</h1>
+			</div>
+
+			<div :class="'grid gap-4 mb-4 grid-cols-' + dataCard.totalChildrenByClass.length">
+				<div
+					v-for="childrenByClass in dataCard.totalChildrenByClass"
+					class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800 flex-col"
+					:key="childrenByClass.id"
+				>
+					<h1 class="text-gray-900 dark:text-white font-semibold text-lg">
+						Total {{ childrenByClass.nama }}
+					</h1>
 					<span class="text-gray-900 dark:text-white font-bold text-3xl">
-						{{ dataCard.totalCoupon || "-" }}
+						{{ childrenByClass._count.Children || "-" }}
 					</span>
 				</div>
 			</div>
@@ -83,121 +96,27 @@ onMounted(() => {
 						{{ dataCard.totalGirlChildren || "-" }}
 					</span>
 				</div>
-				<div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-					<p class="text-2xl text-gray-400 dark:text-gray-500">
-						<svg
-							class="w-3.5 h-3.5"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 18 18"
-						>
-							<path
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M9 1v16M1 9h16"
-							/>
-						</svg>
-					</p>
-				</div>
-				<div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-					<p class="text-2xl text-gray-400 dark:text-gray-500">
-						<svg
-							class="w-3.5 h-3.5"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 18 18"
-						>
-							<path
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M9 1v16M1 9h16"
-							/>
-						</svg>
-					</p>
+			</div>
+
+			<div :class="'grid gap-4 mb-4 grid-cols-' + dataCard.totalCouponByClass.length">
+				<div
+					v-for="couponByClass in dataCard.totalCouponByClass"
+					class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800 flex-col"
+					:key="couponByClass.id"
+				>
+					<h1 class="text-gray-900 dark:text-white font-semibold text-lg">Total {{ couponByClass.nama }}</h1>
+					<span class="text-gray-900 dark:text-white font-bold text-3xl">
+						{{ couponByClass.totalCoupon || "-" }}
+					</span>
 				</div>
 			</div>
-			<div class="grid grid-cols-2 gap-4">
-				<div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-					<p class="text-2xl text-gray-400 dark:text-gray-500">
-						<svg
-							class="w-3.5 h-3.5"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 18 18"
-						>
-							<path
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M9 1v16M1 9h16"
-							/>
-						</svg>
-					</p>
-				</div>
-				<div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-					<p class="text-2xl text-gray-400 dark:text-gray-500">
-						<svg
-							class="w-3.5 h-3.5"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 18 18"
-						>
-							<path
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M9 1v16M1 9h16"
-							/>
-						</svg>
-					</p>
-				</div>
-				<div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-					<p class="text-2xl text-gray-400 dark:text-gray-500">
-						<svg
-							class="w-3.5 h-3.5"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 18 18"
-						>
-							<path
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M9 1v16M1 9h16"
-							/>
-						</svg>
-					</p>
-				</div>
-				<div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-					<p class="text-2xl text-gray-400 dark:text-gray-500">
-						<svg
-							class="w-3.5 h-3.5"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 18 18"
-						>
-							<path
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M9 1v16M1 9h16"
-							/>
-						</svg>
-					</p>
+
+			<div class="grid grid-cols-1 gap-4 mb-4">
+				<div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800 flex-col">
+					<h1 class="text-gray-900 dark:text-white font-semibold text-lg">Total Coupon</h1>
+					<span class="text-gray-900 dark:text-white font-bold text-3xl">
+						{{ dataCard.totalCoupon || "-" }}
+					</span>
 				</div>
 			</div>
 		</div>
