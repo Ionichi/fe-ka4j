@@ -1,8 +1,9 @@
 <script setup>
-import { nextTick, reactive, watch } from "vue";
+import { computed, nextTick, reactive, ref, watch } from "vue";
 import ButtonPrimaryComponent from "../main/ButtonPrimaryComponent.vue";
 import ModalComponent from "../main/ModalComponent.vue";
 import { useToast } from "vue-toast-notification";
+import InputGroupComponent from "../main/InputGroupComponent.vue";
 
 const { showModal, optionsChildren } = defineProps({
 	showModal: { type: Boolean, required: true },
@@ -15,6 +16,26 @@ const emit = defineEmits(["handleSubmitChild"]);
 const $toast = useToast();
 
 let selectedChild = reactive([]);
+
+const keyword = ref("");
+const groupedChildren = computed(() => {
+	if (!optionsChildren) {
+        return {};
+    }
+	const filtered = optionsChildren.filter((child) => child.label.toLowerCase().includes(keyword.value.toLowerCase()));
+
+	return filtered.reduce((groups, child) => {
+		const kelas = child.kelas;
+
+		if (!groups[kelas]) {
+			groups[kelas] = [];
+		}
+
+		groups[kelas].push(child);
+
+		return groups;
+	}, {});
+});
 
 const isInputValid = () => {
 	return selectedChild.length > 0;
@@ -48,6 +69,7 @@ watch(
 		if (!showModal) {
 			selectedChild = [];
 		}
+		console.log(optionsChildren);
 	}
 );
 </script>
@@ -55,25 +77,50 @@ watch(
 <template>
 	<ModalComponent :show-modal="showModal" :on-close="onClose" modal-title="Add Children" :is-loading="isLoading">
 		<template #modalContent>
+			<InputGroupComponent
+				ref="inputSearch"
+				type="text"
+				groupName=""
+				name="keyword"
+				placeholder="Search child..."
+				:is-required="false"
+				v-model="keyword"
+				class="w-full"
+				tabindex="1"
+			/>
 			<form class="mt-8 mb-5 space-y-5 md:space-y-7 text-left" action="#">
-				<div v-if="optionsChildren != null && optionsChildren.length" class="grid grid-cols-3 gap-5 mb-3">
-					<div
-						v-for="(child, index) in optionsChildren"
-						:key="Math.random() + index"
-						class="flex items-center gap-3"
-					>
-						<input
-							type="checkbox"
-							class="w-6 h-6"
-							:id="child['value']"
-							@change="handleCheck(child['value'], child['label'])"
-							:checked="false"
-							:tabindex="index + 1"
-						/>
-						<label :for="'#' + child['value']" class="text-wrap">{{ child["label"] }}</label>
+				<div v-if="Object.keys(groupedChildren).length" class="space-y-6">
+					<div v-for="(children, kelas) in groupedChildren" :key="kelas">
+						<h3 class="font-semibold text-lg border-b pb-2 mb-3">
+							{{ kelas }}
+						</h3>
+
+						<div class="grid grid-cols-3 gap-4">
+							<div
+								v-for="(child, index) in children"
+								:key="child.value"
+								class="flex items-center gap-3"
+							>
+								<input
+									type="checkbox"
+									class="w-6 h-6"
+									:id="child.value"
+									@change="handleCheck(child.value, child.label)"
+									:tabindex="index + 1"
+									:checked="selectedChild.some(item => item.childrenId === child.value)"
+								/>
+
+								<label :for="child.value" class="cursor-pointer">
+									{{ child.label }}
+								</label>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div v-else class="text-center">No Data</div>
+
+				<div v-else class="text-center py-5">
+					No Data
+				</div>
 			</form>
 		</template>
 		<template #modalButton>

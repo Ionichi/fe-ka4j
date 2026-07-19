@@ -53,6 +53,7 @@ const handleAddChild = async () => {
 				return {
 					label: data.nama,
 					value: data.id,
+					kelas: data.kelas.nama,
 				};
 			});
 		isShowModalChild.value = true;
