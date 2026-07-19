@@ -54,6 +54,7 @@ defineProps({
 					<td v-for="(col, key) in content" :key="key" class="px-6 py-4">
 						<div v-if="key === 'id'" class="flex gap-5 cursor-pointer text-lg">
 							<FontAwesomeIcon
+								v-if="handleEdit"
 								:icon="faPencil"
 								class="text-yellow-500 dark:text-white"
 								@click="handleEdit(col)"
